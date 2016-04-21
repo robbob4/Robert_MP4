@@ -2,3 +2,4 @@ Me.png - Self photo
 Bahamut.png - Sithjester http://untamed.wild-refuge.net/rmxpresources.php?characters
 Moogle.png - Sithjester http://untamed.wild-refuge.net/rmxpresources.php?characters
 Fireball.png - OpenGameArt http://opengameart.org/content/high-res-fire-ball
+Catish.png - Sithjester http://untamed.wild-refuge.net/rmxpresources.php?characters

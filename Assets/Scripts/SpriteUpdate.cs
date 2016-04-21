@@ -12,9 +12,10 @@ public class SpriteUpdate : MonoBehaviour
         East = 3,
         North = 4
     }
+
     private Animator animateComp;
     private Facing currentFacing;
-    private Vector3 oldPos;
+    //private Vector3 oldPos;
     #endregion
 
     // Use this for initialization
@@ -22,21 +23,22 @@ public class SpriteUpdate : MonoBehaviour
     {
         animateComp = GetComponent<Animator>();
         currentFacing = Facing.South;
-        oldPos = transform.position;
+        //oldPos = transform.position;
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
         //determine delta
-        float xAxis = transform.position.x - oldPos.x;
-        float yAxis = transform.position.y - oldPos.y;
-        oldPos = transform.position;
+        //float xAxis = transform.position.x - oldPos.x;
+        //float yAxis = transform.position.y - oldPos.y;
+        //oldPos = transform.position;
         //float xAxis = Input.GetAxis("Horizontal");
-        //float yAxis = Input.GetAxis("Vertical");
+        float yAxis = Input.GetAxis("Vertical");
 
         //animate the sprite
-        updateSprite(xAxis, yAxis);
+        //updateSprite(xAxis, yAxis);
+        updateSprite(0, yAxis);
     }
 
     #region Sprite functions
@@ -64,19 +66,19 @@ public class SpriteUpdate : MonoBehaviour
 
         //determine strongest directional from input
         Facing newFacing = Facing.Unknown;
-        /*if (Mathf.Abs(x) > Mathf.Abs(y))
+        if (Mathf.Abs(x) > Mathf.Abs(y))
         {
             if (x > 0)
                 newFacing = Facing.East;
             else
                 newFacing = Facing.West;
         }
-        else if (Mathf.Abs(y) > Mathf.Abs(x))*/
+        else if (Mathf.Abs(y) > Mathf.Abs(x))
         {
             if (y > 0)
                 newFacing = Facing.North;
-            else
-                newFacing = Facing.South;
+            //else
+                //newFacing = Facing.South;
         }
 
         //set new facing
