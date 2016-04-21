@@ -49,31 +49,35 @@ public class SpriteUpdateEnemy : MonoBehaviour
     {
         //determine strongest directional from state
         Facing newFacing = Facing.Unknown;
-        string trigger;
+        bool run = false;
+        bool walk = false;
+        bool stun = false;
         if (curState == EnemyBehavior.EnemyState.Run)
         {
             if (x > 0)
                 newFacing = Facing.East;
             else
                 newFacing = Facing.West;
-
-            trigger = "Run";
+            run = true;
         }
         else if (curState == EnemyBehavior.EnemyState.Stunned)
         {
             newFacing = Facing.South;
-            trigger = "Stunned";
+            stun = true;
         }
         else
-        {
+        { 
             newFacing = Facing.North;
-            trigger = "Walk";
+            walk = true;
         }
-
-        if (newFacing != currentFacing)
+        
+        if (newFacing != currentFacing && newFacing != Facing.Unknown)
         {
-            animateComp.SetTrigger(trigger);
             currentFacing = newFacing;
+            animateComp.SetBool("Run", run);
+            animateComp.SetBool("Stunned", stun);
+            animateComp.SetBool("Walk", walk);
+            animateComp.SetTrigger("NewFacing");
         }
 
         //set animation speed

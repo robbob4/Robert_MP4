@@ -11,7 +11,7 @@ public class EnemyBehavior : MonoBehaviour {
     }
     public EnemyState currentState = EnemyState.Normal;
     public int lives = 3; //number of lives the entity has
-    [SerializeField] private float checkFacingAngle = 0.7f;
+    [SerializeField] private float checkFacingAngle = 0.8f;
     
     private float timeLeft = 0.0f;
     #endregion
@@ -26,6 +26,9 @@ public class EnemyBehavior : MonoBehaviour {
         // 0: no control
         // 1: always towards the world center, no randomness
 
+    public const int DELAY = 40; //number of frames to delay running rotation when near a boundary
+
+    private int currentDelay;
     private GlobalBehavior globalBehavior;
     private GameObject player;
     #endregion
@@ -60,13 +63,16 @@ public class EnemyBehavior : MonoBehaviour {
         //movement based on state
         if (currentState == EnemyState.Run) //running
         {
-            float distance = Vector3.Distance(player.transform.position, transform.position);
-            float angle = Vector3.Dot(transform.right.normalized,
-            (transform.position - player.transform.position).normalized); //TODO Fix this
-            //Debug.Log("distance: " + distance + " angle: " + angle +  " calc: " + (angle * Time.deltaTime - distance));
+            //turn away if not ndelayed by a boundary collision
+            //if (currentDelay-- <= 0 && transform.position.x > globalBehavior.WorldMin.x + buffer &&
+            //    transform.position.x < globalBehavior.WorldMax.x - buffer &&
+            //    transform.position.y > globalBehavior.WorldMin.y + buffer &&
+            //    transform.position.y < globalBehavior.WorldMax.y - buffer)
+            //{
+            if (currentDelay-- <= 0)
+                transform.up = (transform.position - player.transform.position);
 
-            transform.Rotate(transform.forward, (45 - distance) / angle * Time.deltaTime);
-            //transform.up = (transform.position - player.transform.position);
+            //move in new direction
             transform.position += (speed * Time.smoothDeltaTime) * transform.up;
         }
         else if(currentState == EnemyState.Stunned) //stunned still
@@ -84,7 +90,8 @@ public class EnemyBehavior : MonoBehaviour {
 		if (status != GlobalBehavior.WorldBoundStatus.Inside) {
 		    //Debug.Log("collided position: " + this.transform.position);
 			newDirection();
-		}
+            currentDelay = DELAY;
+        }
 
         //clamp to world
         globalBehavior.clampToWorld(transform, 5.0f);
@@ -108,9 +115,9 @@ public class EnemyBehavior : MonoBehaviour {
     }
 
     //collision
-    void On2DTriggerEnter(Collider2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log(other);
+        //Debug.Log(other);
         //ignore anything other than Projectiles
         if (other.gameObject.name != "Projectile(Clone)")
             return;
@@ -175,7 +182,7 @@ public class EnemyBehavior : MonoBehaviour {
 		Vector2 vn = new Vector2(v.y, -v.x); // this is a direciotn that is perpendicular to V
 
 		float useV = 1.0f - Mathf.Clamp(towardsCenter, 0.01f, 1.0f);
-		float tanSpread = Mathf.Tan( useV * Mathf.PI / 2.0f );
+		float tanSpread = Mathf.Tan(useV * Mathf.PI / 2.0f );
 
 		float randomX = Random.Range(0f, 1f);
 		float yRange = tanSpread * randomX;
