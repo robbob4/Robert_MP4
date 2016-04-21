@@ -5,24 +5,28 @@ public class PlayerControl : MonoBehaviour
 {
     #region Player movement variables
     [SerializeField] private float speed = 1.0f;
-    [SerializeField] private float turnSpeed = 45;
+    [SerializeField] private float turnSpeed = 45.0f;
     [SerializeField] private int recastDelay = 10; //number of frames to be able to fire a projectile
 
-    private GlobalBehavior globalBehavior;
-    private int delayCount;
+    private GlobalBehavior globalBehavior = null;
+    private int delayCount = 0;
     #endregion
 
-    public GameObject projectile = null;
+    public GameObject Projectile = null;
 
     // Use this for initialization
     //assumes this has a sprite renderer and 4 facing directions named in order
     void Start ()
     {
         globalBehavior = GameObject.Find("GameManager").GetComponent<GlobalBehavior>();
+        if (globalBehavior == null)
+            Debug.LogError("GameManager not found.");
 
         // initialize projectile spawning
-        if (null == projectile)
-            projectile = Resources.Load("Prefabs/Projectile") as GameObject;
+        if (Projectile == null)
+            Projectile = Resources.Load("Prefabs/Projectile") as GameObject;
+        if (Projectile == null)
+            Debug.LogError("Projectile not found.");
     }
 
     // Update is called once per frame
@@ -37,7 +41,7 @@ public class PlayerControl : MonoBehaviour
         transform.Rotate(transform.forward, - xAxis * Time.deltaTime * turnSpeed);
 
         //clamp to world
-        globalBehavior.clampToWorld(transform, 5.0f);
+        globalBehavior.ClampToWorld(transform, 5.0f);
         #endregion
 
         #region Fire projectile
@@ -45,7 +49,7 @@ public class PlayerControl : MonoBehaviour
         {
             if(delayCount-- <= 0)
             {
-                GameObject e = Instantiate(projectile) as GameObject;
+                GameObject e = Instantiate(Projectile) as GameObject;
                 ProjectileMovement proj = e.GetComponent<ProjectileMovement>(); // Shows how to get the script from GameObject
                 if (null != proj)
                 {
@@ -59,7 +63,7 @@ public class PlayerControl : MonoBehaviour
 
         #region Toggle movement
         if (Input.GetButtonUp("Jump"))
-            globalBehavior.movement = !globalBehavior.movement;
+            globalBehavior.Movement = !globalBehavior.Movement;
         #endregion
     }
 }

@@ -13,7 +13,7 @@ public class SpriteUpdate : MonoBehaviour
         North = 4
     }
 
-    private Animator animateComp;
+    private Animator animateComp = null;
     private Facing currentFacing;
     //private Vector3 oldPos;
     #endregion
@@ -22,6 +22,9 @@ public class SpriteUpdate : MonoBehaviour
     void Start ()
     {
         animateComp = GetComponent<Animator>();
+        if (animateComp == null)
+            Debug.LogError("Animator not found.");
+
         currentFacing = Facing.South;
         //oldPos = transform.position;
     }

@@ -13,7 +13,7 @@ public class SpriteUpdateEnemy : MonoBehaviour
         North = 4
     }
 
-    private Animator animateComp;
+    private Animator animateComp = null;
     private Facing currentFacing;
     private Vector3 oldPos;
     #endregion
@@ -24,9 +24,15 @@ public class SpriteUpdateEnemy : MonoBehaviour
     void Start()
     {
         animateComp = GetComponent<Animator>();
+        if (animateComp == null)
+            Debug.LogError("Animator not found.");
+
+        curState = GetComponent<EnemyBehavior>().currentState;
+        if (curState == null)
+            Debug.LogError("currentState not found.");
+
         currentFacing = Facing.South;
         oldPos = transform.position;
-        curState = GetComponent<EnemyBehavior>().currentState;
     }
 
     // Update is called once per frame

@@ -16,7 +16,7 @@ GameObject:
   - 114: {fileID: 11448028}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -104,10 +104,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
-  lives: 3
+  Lives: 3
   checkFacingAngle: 0.7
-  speed: 30
-  turnSpeed: 9
+  Speed: 30
+  TurnSpeed: 9
   minSpeed: 20
   maxSpeed: 40
   towardsCenter: 0.5

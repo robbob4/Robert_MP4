@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GlobalBehavior : MonoBehaviour {
 
@@ -13,14 +14,19 @@ public class GlobalBehavior : MonoBehaviour {
 
     #region Support for runtime enemy creation
     public const float ENEMY_SPAWN_INTERVAL = 3.0f; // in seconds
-
-    public GameObject enemyToSpawn = null;
+    public GameObject EnemyToSpawn = null;
     [SerializeField] private int initialSpawn = 50;
 
-    private float preSpawnTime = -1f;
+    private float preSpawnTime = -1.0f;
     #endregion
 
-    [HideInInspector] public bool movement = false; //bool for movement and spawning of enemies
+    #region Status variables
+    private Text scoreText = null;
+    private Text statusText = null;
+    public int Score = 0;
+    #endregion
+
+    [HideInInspector] public bool Movement = false; //bool for movement and spawning of enemies
 
     // Use this for initialization
     void Start () {
@@ -30,21 +36,35 @@ public class GlobalBehavior : MonoBehaviour {
         UpdateWorldWindowBound();
         #endregion
 
-        #region initialize enemy spawning
-        if (null == enemyToSpawn)
-            enemyToSpawn = Resources.Load("Prefabs/Enemy") as GameObject;
-        #endregion
+        #region enemy spawning
+        if (EnemyToSpawn == null)
+            EnemyToSpawn = Resources.Load("Prefabs/Enemy") as GameObject;
+        if (EnemyToSpawn == null)
+            Debug.LogError("Enemy not found.");
 
         // first 50 enemies
         for (int i = 0; i < initialSpawn; i++)
             SpawnAnEnemy(true);
+        #endregion
+
+        scoreText = GameObject.Find("Score").GetComponent<Text>();
+        if (scoreText == null)
+            Debug.LogError("Score not found.");
+        statusText = GameObject.Find("Status").GetComponent<Text>();
+        if (statusText == null)
+            Debug.LogError("Status not found.");
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (movement)
+        //spawn enemies perodically if movement enabled
+        if (Movement)
             SpawnAnEnemy(false);
+
+        //update status UI text
+        updateScore();
+        updateStatus();
     }
 
     #region Game Window World size bound support
@@ -108,7 +128,7 @@ public class GlobalBehavior : MonoBehaviour {
 	}
 
     //clamps a transform to a world with an additional buffer
-    public void clampToWorld(Transform pos, float buffer)
+    public void ClampToWorld(Transform pos, float buffer)
     {
         //x
         if (pos.position.x + buffer > WorldMax.x)
@@ -130,7 +150,7 @@ public class GlobalBehavior : MonoBehaviour {
     {
         if ((Time.realtimeSinceStartup - preSpawnTime) > ENEMY_SPAWN_INTERVAL || ignore)
         {
-            GameObject e = (GameObject)Instantiate(enemyToSpawn);
+            GameObject e = (GameObject)Instantiate(EnemyToSpawn);
 
             float randX = Random.Range(WorldMin.x + 5f, WorldMax.x -5f);
             float randY = Random.Range(WorldMin.y +5f, WorldMax.y -5f);
@@ -139,6 +159,20 @@ public class GlobalBehavior : MonoBehaviour {
             preSpawnTime = Time.realtimeSinceStartup;
             //Debug.Log("New enemy at: " + preSpawnTime.ToString());
         }
+    }
+    #endregion
+
+    #region Status functions
+    private void updateStatus()
+    {
+        GameObject[] projectiles = GameObject.FindGameObjectsWithTag("Projectile");
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        statusText.text = "Status: " + enemies.Length + " moogles " + projectiles.Length + " fireballs";
+    }
+
+    private void updateScore()
+    {
+        scoreText.text = "Score: " + Score;
     }
     #endregion
 }

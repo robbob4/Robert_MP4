@@ -10,15 +10,16 @@ public class EnemyBehavior : MonoBehaviour {
         Stunned =2
     }
     public EnemyState currentState = EnemyState.Normal;
-    public int lives = 3; //number of lives the entity has
+    public int Lives = 3; //number of lives the entity has
     [SerializeField] private float checkFacingAngle = 0.8f;
     
     private float timeLeft = 0.0f;
     #endregion
 
     #region Enemy movement variables
-    public float speed = 30.0f;
-    public float turnSpeed = 9.0f;
+    public const int DELAY = 40; //number of frames to delay running rotation when near a boundary
+    public float Speed = 30.0f;
+    public float TurnSpeed = 9.0f;
     [SerializeField] private float minSpeed = 20.0f;
     [SerializeField] private float maxSpeed = 40.0f;
     [SerializeField] private float towardsCenter = 0.5f;
@@ -26,11 +27,9 @@ public class EnemyBehavior : MonoBehaviour {
         // 0: no control
         // 1: always towards the world center, no randomness
 
-    public const int DELAY = 40; //number of frames to delay running rotation when near a boundary
-
-    private int currentDelay;
-    private GlobalBehavior globalBehavior;
-    private GameObject player;
+    private int currentDelay = 0;
+    private GlobalBehavior globalBehavior = null;
+    private GameObject player = null;
     #endregion
 
     #region Sprite variables
@@ -43,10 +42,16 @@ public class EnemyBehavior : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        //spriteComp = GetComponent<SpriteRenderer>();
+        
         globalBehavior = GameObject.Find("GameManager").GetComponent<GlobalBehavior>();
-        player = GameObject.Find("Hero");
+        if (globalBehavior == null)
+            Debug.LogError("GameManager not found.");
 
+        player = GameObject.Find("Hero");
+        if (globalBehavior == null)
+            Debug.LogError("Hero not found.");
+
+        //spriteComp = GetComponent<SpriteRenderer>();
         //if (normalSprite == null)
         //    normalSprite = spriteComp.sprite;
 
@@ -73,15 +78,15 @@ public class EnemyBehavior : MonoBehaviour {
                 transform.up = (transform.position - player.transform.position);
 
             //move in new direction
-            transform.position += (speed * Time.smoothDeltaTime) * transform.up;
+            transform.position += (Speed * Time.smoothDeltaTime) * transform.up;
         }
         else if(currentState == EnemyState.Stunned) //stunned still
         {
-            transform.Rotate(transform.forward, Time.deltaTime * turnSpeed);
+            transform.Rotate(transform.forward, Time.deltaTime * TurnSpeed);
         }  
-        else if (globalBehavior.movement) //normal
+        else if (globalBehavior.Movement) //normal
         {
-            transform.position += (speed * Time.smoothDeltaTime) * transform.up;
+            transform.position += (Speed * Time.smoothDeltaTime) * transform.up;
         }
 
         //check boundary collision
@@ -94,7 +99,7 @@ public class EnemyBehavior : MonoBehaviour {
         }
 
         //clamp to world
-        globalBehavior.clampToWorld(transform, 5.0f);
+        globalBehavior.ClampToWorld(transform, 5.0f);
 	}
 
     #region State functions
@@ -131,8 +136,12 @@ public class EnemyBehavior : MonoBehaviour {
         Destroy(other.gameObject);
 
         //decrease lives and destroy if out of lives
-        if (--lives <= 0)
+        if (--Lives <= 0)
+        {
+            globalBehavior.Score++;
             Destroy(gameObject);
+        }
+            
     }
 
     //determines state between Normal and Run
@@ -196,7 +205,7 @@ public class EnemyBehavior : MonoBehaviour {
     //changes speed to a random between minSpeed and maxSpeed
     private void newSpeed()
     {
-        speed = Random.Range(minSpeed, maxSpeed);
+        Speed = Random.Range(minSpeed, maxSpeed);
     }
     #endregion
 }

@@ -3,14 +3,16 @@ using System.Collections;
 
 public class ProjectileMovement : MonoBehaviour
 {
-    [SerializeField] private float speed = 100f;
+    [SerializeField] private float speed = 100.0f;
 
-    private GlobalBehavior globalBehavior;
+    private GlobalBehavior globalBehavior = null;
 
     // Use this for initialization
     void Start ()
     {
         globalBehavior = GameObject.Find("GameManager").GetComponent<GlobalBehavior>();
+        if (globalBehavior == null)
+            Debug.LogError("GameManager not found.");
     }
 	
 	// Update is called once per frame
