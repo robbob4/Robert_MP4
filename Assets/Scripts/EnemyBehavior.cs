@@ -1,3 +1,18 @@
+// -------------------------- EnemyBehavior.cs --------------------------------
+// Author - Robert Griswold CSS 385
+// Created - Apr 19, 2016
+// Modified - April 21, 2016
+// ----------------------------------------------------------------------------
+// Purpose - Implementation for an enemy that has three states: Normal, Run, 
+// and Stunned. See notes for details. Movement is only allowed via a variable 
+// in the GameManager.
+// ----------------------------------------------------------------------------
+// Notes - Normal: Default state that can move forward and bounces off walls.
+// Run: When 30 units in LOS of player, changes sprite animation and runs away.
+// Stunned: Hit by a projectile and decreases lives. If killed, increments 
+// core in GameManager.
+// ----------------------------------------------------------------------------
+
 using UnityEngine;
 using System.Collections;
 

@@ -1,3 +1,15 @@
+// -------------------------- GlobalBehavior.cs -------------------------------
+// Author - Robert Griswold CSS 385
+// Created - Apr 19, 2016
+// Modified - April 21, 2016
+// ----------------------------------------------------------------------------
+// Purpose - Implementation for a global controller class that handles enemy 
+// spawning, score, status, and boundaries.
+// ----------------------------------------------------------------------------
+// Notes - Objects can be bound to this parent's camera boundary using 
+// ClampToWorld(transform).
+// ----------------------------------------------------------------------------
+
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
@@ -167,7 +179,12 @@ public class GlobalBehavior : MonoBehaviour {
     {
         GameObject[] projectiles = GameObject.FindGameObjectsWithTag("Projectile");
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        statusText.text = "Status: " + enemies.Length + " moogles " + projectiles.Length + " fireballs";
+        statusText.text = "Status: " + enemies.Length + " moogle";
+        if (enemies.Length != 1)
+            statusText.text += "s";
+        statusText.text += " " + projectiles.Length + " fireball";
+        if (projectiles.Length != 1)
+            statusText.text += "s";
     }
 
     private void updateScore()

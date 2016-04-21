@@ -1,4 +1,17 @@
-﻿using UnityEngine;
+﻿// ------------------------------- Tiling.cs ----------------------------------
+// Author - Robert Griswold CSS 385
+// Created - Apr 21, 2016
+// Modified - April 21, 2016
+// ----------------------------------------------------------------------------
+// Purpose - Implementation for a means to apply tiles to the world randomly.
+// Process starts at world min and works upward along the y axis first. 
+// Automatically loads the prefabs in the path specified.
+// ----------------------------------------------------------------------------
+// Notes - Assumes prefabs end with names like TR, BR, B, T for things like
+// top right, bottom right, bottom, top designations.
+// ----------------------------------------------------------------------------
+
+using UnityEngine;
 using System.Collections;
 
 //Loads tilesets from file using path
@@ -6,8 +19,10 @@ public class Tiling : MonoBehaviour
 {
     #region Tileset variables
     [SerializeField] private string path = "Prefabs/Tileset/";
-    [SerializeField] private float width;
-    [SerializeField] private float height;
+    [SerializeField] private float width = 10;
+    [SerializeField] private float height = 10;
+    [SerializeField] private bool randomFlipX = false;
+    [SerializeField] private bool randomFlipY = false;
 
     [HideInInspector] public GameObject tileToSpawn = null;
     private int delay = 1;
@@ -27,8 +42,12 @@ public class Tiling : MonoBehaviour
 	void Update ()
     {
         if (delay == 0)
+        {
             tileWorld();
-        else
+            delay--;
+        }
+            
+        else if (delay > 0)
             delay--;
     }
 
@@ -36,44 +55,68 @@ public class Tiling : MonoBehaviour
     {
         Vector3 max = globalBehavior.WorldMax;
         Vector3 min = globalBehavior.WorldMin;
+        Vector3 curPos = globalBehavior.WorldMin;
 
-        Debug.Log((int)min.x + " " + max.x + (0 + (int)width));
-        Debug.Log((int)min.y + " " + max.y + (0 + (int)height));
+        //Debug.Log(min.x + " " + max.x + " " + (0 + (int)width));
+        //Debug.Log(min.y + " " + max.y + " " + (0 + (int)height));
+
+        int count = 0;
 
         //span the viewable space
-        for (int x = (int)min.x; x < max.x; x += (int)width)
+        for (; curPos.x < max.x; curPos.x += (int)width)
         {
-            for (int y = (int)min.y; y < max.y; y += (int)height)
+            for (; curPos.y < max.y; curPos.y += (int)height)
             {
-                Debug.Log(x + "," + y);
-                //todo randomization
                 //determine the tile
-                if (y >= (int)max.y + height / 2 && x >= (int)max.x + width / 2)
-                    tileToSpawn = Resources.Load(path + "BR") as GameObject;
-                else if (y == (int)min.y && x >= (int)max.x + width / 2)
-                    tileToSpawn = Resources.Load(path + "TR") as GameObject;
-                else if (y >= (int)min.y + height / 2 && x == (int)min.x)
-                    tileToSpawn = Resources.Load(path + "BL") as GameObject;
-                else if (y == (int)min.y && x == (int)min.x)
-                    tileToSpawn = Resources.Load(path + "TL") as GameObject;
-                else if (y == (int)min.y)
-                    tileToSpawn = Resources.Load(path + "T") as GameObject;
-                else if (y >= (int)max.y + height / 2)
+                //if (curPos.y >= (int)max.y + height / 2 && curPos.x >= (int)max.x + width / 2)
+                //    tileToSpawn = Resources.Load(path + "BR") as GameObject;
+                //else if (curPos.y == (int)min.y && curPos.x >= (int)max.x + width / 2)
+                //    tileToSpawn = Resources.Load(path + "TR") as GameObject;
+                //else if (curPos.y >= (int)min.y + height / 2 && curPos.x == (int)min.x)
+                //    tileToSpawn = Resources.Load(path + "BL") as GameObject;
+                //else if (curPos.y == (int)min.y && curPos.x == (int)min.x)
+                //    tileToSpawn = Resources.Load(path + "TL") as GameObject;
+                //else if (curPos.y == (int)min.y)
+                //    tileToSpawn = Resources.Load(path + "T") as GameObject;
+                //else if (curPos.y >= (int)max.y + height / 2)
+                //    tileToSpawn = Resources.Load(path + "B") as GameObject;
+                //else
+                //    tileToSpawn = Resources.Load(path + "B") as GameObject;
+
+                int rand = Mathf.RoundToInt(Random.Range(0, 2));
+                if(rand == 0)
                     tileToSpawn = Resources.Load(path + "B") as GameObject;
                 else
-                    tileToSpawn = Resources.Load(path + "B") as GameObject;
+                    tileToSpawn = Resources.Load(path + "T") as GameObject;
 
                 //break if missing item
                 if (tileToSpawn == null)
                 {
-                    Debug.LogError("Tile missing at (" + x + ", " + y);
+                    Debug.LogError("Tile missing at (" + curPos.x + ", " + curPos.y + ")");
                     return;
                 }
 
                 //place the tile
                 GameObject tile = (GameObject)Instantiate(tileToSpawn);
-                tile.transform.position = new Vector3(x + width / 2, y + height / 2);
+                tile.transform.position = new Vector3(curPos.x + width / 2, curPos.y + height / 2);
+                tile.GetComponent<SpriteRenderer>().sortingOrder = count++;
+
+                //randomize flipping
+                if(randomFlipX)
+                {
+                    rand = Mathf.RoundToInt(Random.Range(0, 2));
+                    if (rand == 0)
+                        tile.GetComponent<SpriteRenderer>().flipX = true;
+                }
+                if (randomFlipY)
+                {
+                    rand = Mathf.RoundToInt(Random.Range(0, 2));
+                    if (rand == 0)
+                        tile.GetComponent<SpriteRenderer>().flipY = true;
+                }
             }
+
+            curPos.y = min.y;
         }
     }
 }

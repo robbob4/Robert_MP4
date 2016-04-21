@@ -1,4 +1,14 @@
-﻿using UnityEngine;
+﻿// ----------------------- ProjectileMovement.cs ------------------------------
+// Author - Robert Griswold CSS 385
+// Created - Apr 19, 2016
+// Modified - April 21, 2016
+// ----------------------------------------------------------------------------
+// Purpose - Implementation for a projectile that moves forward and collides.
+// ----------------------------------------------------------------------------
+// Notes - Despawned when collided.
+// ----------------------------------------------------------------------------
+
+using UnityEngine;
 using System.Collections;
 
 public class ProjectileMovement : MonoBehaviour

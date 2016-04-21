@@ -1,4 +1,16 @@
-﻿using UnityEngine;
+﻿// -------------------------- PlayerControl.cs --------------------------------
+// Author - Robert Griswold CSS 385
+// Created - Apr 19, 2016
+// Modified - April 21, 2016
+// ----------------------------------------------------------------------------
+// Purpose - Implementation for a player controlled hero that can pause enemy 
+// movement with space, fire, move up/down, rotate left/right, and is 
+// clamped to the boundaries.
+// ----------------------------------------------------------------------------
+// Notes - None.
+// ----------------------------------------------------------------------------
+
+using UnityEngine;
 using System.Collections;
 
 public class PlayerControl : MonoBehaviour
@@ -10,6 +22,7 @@ public class PlayerControl : MonoBehaviour
 
     private GlobalBehavior globalBehavior = null;
     private int delayCount = 0;
+    private AudioSource audioComp = null;
     #endregion
 
     public GameObject Projectile = null;
@@ -27,6 +40,10 @@ public class PlayerControl : MonoBehaviour
             Projectile = Resources.Load("Prefabs/Projectile") as GameObject;
         if (Projectile == null)
             Debug.LogError("Projectile not found.");
+
+        audioComp = GetComponentInChildren<AudioSource>();
+        if (audioComp == null)
+            Debug.LogError("AudioSource not found.");
     }
 
     // Update is called once per frame
@@ -57,6 +74,7 @@ public class PlayerControl : MonoBehaviour
                     proj.SetForwardDirection(transform.up);
                 }
                 delayCount = recastDelay;
+                audioComp.Play();
             }
         }
         #endregion

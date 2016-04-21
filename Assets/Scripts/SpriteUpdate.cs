@@ -1,4 +1,16 @@
-﻿using UnityEngine;
+﻿// --------------------------- SpriteUpdate.cs --------------------------------
+// Author - Robert Griswold CSS 385
+// Created - Apr 19, 2016
+// Modified - April 21, 2016
+// ----------------------------------------------------------------------------
+// Purpose - Implementation for a player sprite animation behavior script. 
+// Keeps track of facing, and reads input to determine primary direction.
+// ----------------------------------------------------------------------------
+// Notes - Commented out code is for full directional functionality, rather 
+// than having the player rotate.
+// ----------------------------------------------------------------------------
+
+using UnityEngine;
 using System.Collections;
 
 public class SpriteUpdate : MonoBehaviour
