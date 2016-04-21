@@ -14,9 +14,9 @@ public class GlobalBehavior : MonoBehaviour {
 
     #region Support for runtime enemy creation
     public const float ENEMY_SPAWN_INTERVAL = 3.0f; // in seconds
-    public GameObject EnemyToSpawn = null;
     [SerializeField] private int initialSpawn = 50;
 
+    [HideInInspector] public GameObject EnemyToSpawn = null;
     private float preSpawnTime = -1.0f;
     #endregion
 

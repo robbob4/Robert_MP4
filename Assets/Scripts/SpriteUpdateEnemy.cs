@@ -28,8 +28,6 @@ public class SpriteUpdateEnemy : MonoBehaviour
             Debug.LogError("Animator not found.");
 
         curState = GetComponent<EnemyBehavior>().currentState;
-        if (curState == null)
-            Debug.LogError("currentState not found.");
 
         currentFacing = Facing.South;
         oldPos = transform.position;
