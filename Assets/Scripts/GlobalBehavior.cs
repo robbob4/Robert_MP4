@@ -12,13 +12,14 @@ public class GlobalBehavior : MonoBehaviour {
     #endregion
 
     #region Support for runtime enemy creation
-    private float mPreEnemySpawnTime = -1f;
-    private const float kEnemySpawnInterval = 1.0f; // in seconds
+    public const float ENEMY_SPAWN_INTERVAL = 3.0f; // in seconds
+    public GameObject enemyToSpawn = null;
+    [SerializeField] private int initialSpawn = 50;
 
-    public GameObject mEnemyToSpawn = null;
+    private float preSpawnTime = -1f;
     #endregion
 
-    public bool movement = false; //bool for whether movement should be applied to enemies
+    [HideInInspector] public bool movement = false; //bool for movement and spawning of enemies
 
     // Use this for initialization
     void Start () {
@@ -29,9 +30,20 @@ public class GlobalBehavior : MonoBehaviour {
         #endregion
 
         #region initialize enemy spawning
-        if (null == mEnemyToSpawn)
-            mEnemyToSpawn = Resources.Load("Prefabs/Enemy") as GameObject;
+        if (null == enemyToSpawn)
+            enemyToSpawn = Resources.Load("Prefabs/Enemy") as GameObject;
         #endregion
+
+        // first 50 enemies
+        for (int i = 0; i < initialSpawn; i++)
+            SpawnAnEnemy(true);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (movement)
+            SpawnAnEnemy(false);
     }
 
     #region Game Window World size bound support
@@ -112,13 +124,19 @@ public class GlobalBehavior : MonoBehaviour {
     #endregion
 
     #region enemy spawning support
-    private void SpawnAnEnemy()
+    //spawns an enemy if within allowed spawning time unless overridden with a bool
+    private void SpawnAnEnemy(bool ignore)
     {
-        if ((Time.realtimeSinceStartup - mPreEnemySpawnTime) > kEnemySpawnInterval)
+        if ((Time.realtimeSinceStartup - preSpawnTime) > ENEMY_SPAWN_INTERVAL || ignore)
         {
-            GameObject e = (GameObject)Instantiate(mEnemyToSpawn);
-            mPreEnemySpawnTime = Time.realtimeSinceStartup;
-            Debug.Log("New enemy at: " + mPreEnemySpawnTime.ToString());
+            GameObject e = (GameObject)Instantiate(enemyToSpawn);
+
+            float randX = Random.Range(WorldMin.x + 5f, WorldMax.x -5f);
+            float randY = Random.Range(WorldMin.y +5f, WorldMax.y -5f);
+            e.transform.position = new Vector3(randX, randY);
+
+            preSpawnTime = Time.realtimeSinceStartup;
+            //Debug.Log("New enemy at: " + preSpawnTime.ToString());
         }
     }
     #endregion

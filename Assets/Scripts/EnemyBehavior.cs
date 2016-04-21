@@ -35,12 +35,12 @@ public class EnemyBehavior : MonoBehaviour {
     //public Sprite stunnedSprite;
     //public Sprite runSprite;
 
-    private SpriteRenderer spriteComp;
+    //private SpriteRenderer spriteComp;
     #endregion
 
     // Use this for initialization
     void Start () {
-        spriteComp = GetComponent<SpriteRenderer>();
+        //spriteComp = GetComponent<SpriteRenderer>();
         globalBehavior = GameObject.Find("GameManager").GetComponent<GlobalBehavior>();
         player = GameObject.Find("Hero");
 
@@ -53,10 +53,8 @@ public class EnemyBehavior : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-        //update timer
+        //update timer and change state
         updateTimer();
-
-        //change state
         changeState();
 
         //movement based on state
@@ -64,7 +62,7 @@ public class EnemyBehavior : MonoBehaviour {
         {
             float distance = Vector3.Distance(player.transform.position, transform.position);
             float angle = Vector3.Dot(transform.right.normalized,
-            (transform.position - player.transform.position).normalized);
+            (transform.position - player.transform.position).normalized); //TODO Fix this
             //Debug.Log("distance: " + distance + " angle: " + angle +  " calc: " + (angle * Time.deltaTime - distance));
 
             transform.Rotate(transform.forward, (45 - distance) / angle * Time.deltaTime);
