@@ -169,7 +169,7 @@ public class EnemyBehavior : MonoBehaviour {
             (transform.position - player.transform.position).normalized);
         
         //determine new state
-        if (distance <= 30 && angle > checkFacingAngle)
+        if (distance <= 31 && angle > checkFacingAngle)
         {
             currentState = EnemyState.Run;
             //spriteComp.sprite = runSprite;
