@@ -1,13 +1,13 @@
 ﻿// --------------------------- SpriteUpdate.cs --------------------------------
 // Author - Robert Griswold CSS 385
 // Created - Apr 19, 2016
-// Modified - April 21, 2016
+// Modified - April 25, 2016
 // ----------------------------------------------------------------------------
 // Purpose - Implementation for a player sprite animation behavior script. 
 // Keeps track of facing, and reads input to determine primary direction.
 // ----------------------------------------------------------------------------
-// Notes - Commented out code is for full directional functionality, rather 
-// than having the player rotate.
+// Notes - Determines player facing from input rather than grabbing variable 
+// from control due to the necessity of knowing when the facing has changed.
 // ----------------------------------------------------------------------------
 
 using UnityEngine;
@@ -15,8 +15,8 @@ using System.Collections;
 
 public class SpriteUpdate : MonoBehaviour
 {
-    #region Sprite variables
-    enum Facing
+    #region Variables
+    public enum Facing
     {
         Unknown = 0,
         South = 1,
@@ -24,10 +24,8 @@ public class SpriteUpdate : MonoBehaviour
         East = 3,
         North = 4
     }
-
+    private Facing currentFacing = Facing.South;
     private Animator animateComp = null;
-    private Facing currentFacing;
-    //private Vector3 oldPos;
     #endregion
 
     // Use this for initialization
@@ -35,52 +33,36 @@ public class SpriteUpdate : MonoBehaviour
     {
         animateComp = GetComponent<Animator>();
         if (animateComp == null)
-            Debug.LogError("Animator not found.");
-
-        currentFacing = Facing.South;
-        //oldPos = transform.position;
+            Debug.LogError("Animator not found for " + this + ".");
     }
 	
 	// Update is called once per frame
 	void Update ()
-    {
+    {        
         //determine delta
         //float xAxis = transform.position.x - oldPos.x;
         //float yAxis = transform.position.y - oldPos.y;
         //oldPos = transform.position;
-        //float xAxis = Input.GetAxis("Horizontal");
+        float xAxis = Input.GetAxis("Horizontal");
         float yAxis = Input.GetAxis("Vertical");
 
         //animate the sprite
-        //updateSprite(xAxis, yAxis);
-        updateSprite(0, yAxis);
+        updateSprite(xAxis, yAxis);
     }
 
     #region Sprite functions
     //update the sprite facing, and animation speed
     private void updateSprite(float x, float y)
     {
-        //determine direction from rotation
-        //Vector3 direction = transform.right;
-        //Facing newFacing = Facing.Unknown;
+        if (animateComp == null)
+            return;
 
-        //if (direction.x > direction.y) //more vertical than horizontal
-        //{
-        //    if (direction.x > 0)
-        //        newFacing = Facing.North;
-        //    else if (direction.x < 0)
-        //        newFacing = Facing.South;
-        //}
-        //else //more horizontal than vertical
-        //{
-        //    if (direction.y > 0)
-        //        newFacing = Facing.West;
-        //    else if (direction.y < 0)
-        //        newFacing = Facing.East;
-        //}
-
-        //determine strongest directional from input
         Facing newFacing = Facing.Unknown;
+
+        //set animation speed
+        animateComp.SetFloat("Horizontal", x);
+        animateComp.SetFloat("Vertical", y);
+
         if (Mathf.Abs(x) > Mathf.Abs(y))
         {
             if (x > 0)
@@ -92,8 +74,8 @@ public class SpriteUpdate : MonoBehaviour
         {
             if (y > 0)
                 newFacing = Facing.North;
-            //else
-                //newFacing = Facing.South;
+            else
+                newFacing = Facing.South;
         }
 
         //set new facing
@@ -107,10 +89,12 @@ public class SpriteUpdate : MonoBehaviour
             animateComp.SetTrigger("NewFacing");
             currentFacing = newFacing;
         }
-
-        //set animation speed
-        animateComp.SetFloat("Horizontal", x);
-        animateComp.SetFloat("Vertical", y);
     }
     #endregion
+
+    //returns the facing
+    public Facing GetFacing()
+    {
+        return currentFacing;
+    }
 }

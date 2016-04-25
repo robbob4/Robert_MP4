@@ -1,7 +1,7 @@
 // -------------------------- GlobalBehavior.cs -------------------------------
 // Author - Robert Griswold CSS 385
 // Created - Apr 19, 2016
-// Modified - April 21, 2016
+// Modified - April 25, 2016
 // ----------------------------------------------------------------------------
 // Purpose - Implementation for a global controller class that handles enemy 
 // spawning, score, status, and boundaries.
@@ -26,6 +26,7 @@ public class GlobalBehavior : MonoBehaviour {
 
     #region Support for runtime enemy creation
     public const float ENEMY_SPAWN_INTERVAL = 3.0f; // in seconds
+    public bool Movement = false; //bool for movement and spawning of enemies
     [SerializeField] private int initialSpawn = 50;
 
     [HideInInspector] public GameObject EnemyToSpawn = null;
@@ -38,17 +39,19 @@ public class GlobalBehavior : MonoBehaviour {
     public int Score = 0;
     #endregion
 
-    [HideInInspector] public bool Movement = false; //bool for movement and spawning of enemies
+    #region Tiling variables
+    Tiling tiler = null;
+    #endregion
 
     // Use this for initialization
     void Start () {
-        #region world bound support
+        #region World bound support
         mainCamera = Camera.main;
         worldBounds = new Bounds(Vector3.zero, Vector3.one);
         UpdateWorldWindowBound();
         #endregion
 
-        #region enemy spawning
+        #region Enemy spawning
         if (EnemyToSpawn == null)
             EnemyToSpawn = Resources.Load("Prefabs/Enemy") as GameObject;
         if (EnemyToSpawn == null)
@@ -59,12 +62,20 @@ public class GlobalBehavior : MonoBehaviour {
             SpawnAnEnemy(true);
         #endregion
 
+        #region Other references
         scoreText = GameObject.Find("Score").GetComponent<Text>();
         if (scoreText == null)
             Debug.LogError("Score not found.");
         statusText = GameObject.Find("Status").GetComponent<Text>();
         if (statusText == null)
             Debug.LogError("Status not found.");
+
+        tiler = GameObject.Find("Tiler").GetComponent<Tiling>();
+        if (tiler == null)
+            Debug.LogError("Tiler not found.");
+        else //tile the world
+            tiler.TileWorld("Prefabs/Tileset/Tile_Wood_", 11.8f, 11.8f, false, false);
+        #endregion
     }
 
     // Update is called once per frame
@@ -75,8 +86,10 @@ public class GlobalBehavior : MonoBehaviour {
             SpawnAnEnemy(false);
 
         //update status UI text
-        updateScore();
-        updateStatus();
+        if (scoreText != null)
+            updateScore();
+        if (statusText != null)
+            updateStatus();
     }
 
     #region Game Window World size bound support
@@ -160,6 +173,9 @@ public class GlobalBehavior : MonoBehaviour {
     //spawns an enemy if within allowed spawning time unless overridden with a bool
     private void SpawnAnEnemy(bool ignore)
     {
+        if (EnemyToSpawn == null)
+            return;
+
         if ((Time.realtimeSinceStartup - preSpawnTime) > ENEMY_SPAWN_INTERVAL || ignore)
         {
             GameObject e = (GameObject)Instantiate(EnemyToSpawn);

@@ -1,0 +1,16 @@
+Created by Robert Griswold
+CSS 385
+25 Apr 2016
+University of Washington Bothell
+
+Bahamut.png - Sithjester http://untamed.wild-refuge.net/rmxpresources.php?characters
+Moogle.png - Sithjester http://untamed.wild-refuge.net/rmxpresources.php?characters
+Fireball.png - OpenGameArt http://opengameart.org/content/high-res-fire-ball
+Catish.png - Sithjester http://untamed.wild-refuge.net/rmxpresources.php?characters
+JapaneseVillage.png - Sithjester http://untamed.wild-refuge.net/rmxpresources.php?characters
+JapaneseVillage02.png - Sithjester http://untamed.wild-refuge.net/rmxpresources.php?characters
+Short of Stature, Might of Magic.wav - tweexgaminggeek - http://landofvanadiel.com/lov/music/
+Fireball-woosh.wav - Robinhood76 - http://www.freesound.org/people/Robinhood76/sounds/248116/
+Hit.wav - Created in BFXR - http://www.bfxr.net/
+Hit2.wav - Created in BFXR - http://www.bfxr.net/
+Menu.wav - Tristan_Lohengrin - http://www.freesound.org/people/Tristan_Lohengrin/sounds/319781/

@@ -1,7 +1,7 @@
 ﻿// ----------------------- ProjectileMovement.cs ------------------------------
 // Author - Robert Griswold CSS 385
 // Created - Apr 19, 2016
-// Modified - April 21, 2016
+// Modified - April 25, 2016
 // ----------------------------------------------------------------------------
 // Purpose - Implementation for a projectile that moves forward and collides.
 // ----------------------------------------------------------------------------
@@ -22,7 +22,11 @@ public class ProjectileMovement : MonoBehaviour
     {
         globalBehavior = GameObject.Find("GameManager").GetComponent<GlobalBehavior>();
         if (globalBehavior == null)
-            Debug.LogError("GameManager not found.");
+        {
+            Debug.LogError("GameManager not found for " + this + ".");
+            Application.Quit();
+        }
+            
     }
 	
 	// Update is called once per frame

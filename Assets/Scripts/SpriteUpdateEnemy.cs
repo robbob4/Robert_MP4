@@ -1,10 +1,11 @@
 ﻿// ------------------------ SpriteUpdateEnemy.cs ------------------------------
 // Author - Robert Griswold CSS 385
 // Created - Apr 19, 2016
-// Modified - April 21, 2016
+// Modified - April 25, 2016
 // ----------------------------------------------------------------------------
 // Purpose - Implementation for a enemy sprite animation behavior script. 
-// Keeps track of facing, and reads input to determine primary direction.
+// Keeps track of facing, and reads change in position to determine primary 
+// direction.
 // ----------------------------------------------------------------------------
 // Notes - None.
 // ----------------------------------------------------------------------------
@@ -53,51 +54,81 @@ public class SpriteUpdateEnemy : MonoBehaviour
         oldPos = transform.position;
 
         //animate the sprite
-        //updateSprite(xAxis, yAxis);
-        curState = GetComponent<EnemyBehavior>().currentState;
-        updateSprite(xAxis, Mathf.Abs(xAxis) + Mathf.Abs(yAxis));
+        updateSprite(xAxis, yAxis);
     }
 
     #region Sprite functions
     //update the sprite facing, and animation speed
     private void updateSprite(float x, float y)
     {
-        //determine strongest directional from state
+        if (animateComp == null)
+            return;
+
         Facing newFacing = Facing.Unknown;
+        EnemyBehavior.EnemyState newState = GetComponent<EnemyBehavior>().currentState;
         bool run = false;
         bool walk = false;
         bool stun = false;
-        if (curState == EnemyBehavior.EnemyState.Run)
+
+        //set animation speed
+        animateComp.SetFloat("Horizontal", x);
+        animateComp.SetFloat("Vertical", y);
+
+        //update state setting
+        switch (newState)
+        {
+            case EnemyBehavior.EnemyState.Run:
+                run = true;
+                break;
+            case EnemyBehavior.EnemyState.Stunned:
+                stun = true;
+                break;
+            default:
+                walk = true;
+                break;
+        }
+
+        //determine strongest directional
+        if (Mathf.Abs(x) > Mathf.Abs(y))
         {
             if (x > 0)
                 newFacing = Facing.East;
             else
                 newFacing = Facing.West;
-            run = true;
         }
-        else if (curState == EnemyBehavior.EnemyState.Stunned)
+        else if (Mathf.Abs(y) > Mathf.Abs(x))
         {
-            newFacing = Facing.South;
-            stun = true;
+            if (y > 0)
+                newFacing = Facing.North;
+            else
+                newFacing = Facing.South;
         }
-        else
-        { 
-            newFacing = Facing.North;
-            walk = true;
-        }
-        
-        if (newFacing != currentFacing && newFacing != Facing.Unknown)
+
+        if (newState != curState)
         {
-            currentFacing = newFacing;
             animateComp.SetBool("Run", run);
             animateComp.SetBool("Stunned", stun);
             animateComp.SetBool("Walk", walk);
-            animateComp.SetTrigger("NewFacing");
+
+            if (curState == EnemyBehavior.EnemyState.Stunned) //exit stunned
+            {
+                animateComp.SetTrigger("NewFacing");
+            }
+
+
+            curState = newState;
         }
 
-        //set animation speed
-        animateComp.SetFloat("Horizontal", x);
-        animateComp.SetFloat("Vertical", y);
+        if (newFacing != currentFacing)
+        {
+            if (newFacing == Facing.North || newFacing == Facing.South)
+                animateComp.SetBool("VerticalFacing", true);
+            else
+                animateComp.SetBool("VerticalFacing", false);
+
+            animateComp.SetTrigger("NewFacing");
+            currentFacing = newFacing;
+        }        
     }
     #endregion
 }
