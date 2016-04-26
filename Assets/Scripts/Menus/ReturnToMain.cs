@@ -25,7 +25,8 @@ public class ReturnToMain : MonoBehaviour
 	//Update is called once per frame
 	void Update ()
     {
-		if (Input.GetKey (KeyCode.Escape))
+		//if (Input.GetKey (KeyCode.Escape))
+        if (Input.GetAxis("Cancel") == 1)
         {
 			SceneManager.LoadScene("MainMenu");
 			MenuBehavior.TheGameState.SetCurrentLevel("MainMenu");

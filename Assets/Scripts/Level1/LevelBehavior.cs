@@ -63,8 +63,7 @@ public class LevelBehavior : MonoBehaviour
         tiler = GetComponent<Tiling>();
         if (tiler == null)
             Debug.LogError("Tiler not found.");
-        else //tile the world
-            tiler.TileWorld("Prefabs/Tileset/Tile_Wood_", 11.8f, 11.8f, false, false);
+        
         #endregion
 
         #region Get data from GlobalGameManager
@@ -72,9 +71,16 @@ public class LevelBehavior : MonoBehaviour
         level = MenuBehavior.TheGameState.GetLastLevel() + 1;
         initialSpawn = MenuBehavior.TheGameState.GetLastEnemyCount() + level * initialSpawn;
 
-        //allow spawning past level 1
+        //non-level 1 changes
         if (level != 1)
+        {
             Spawning = true;
+            tiler.TileWorld("Prefabs/Tileset/Tile_Wood_", 10.0f, 10.0f, false, false, true, true, 2, 0);
+        }
+        else
+        {
+            tiler.TileWorld("Prefabs/Tileset/Tile_Wood_", 10.0f, 10.0f, false, false, true, true, 1, 0);
+        }  
 
         //increase spawn interval by 1s per level
         EnemySpawnInterval += level;
@@ -95,9 +101,11 @@ public class LevelBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-		// change scene to main menu if escape key pressed
-		if (Input.GetKey (KeyCode.Escape)) {
-			LoadScene("MainMenu");
+        // change scene to main menu if escape key pressed
+        //if (Input.GetKey (KeyCode.Escape)) {
+        if (Input.GetAxis("Cancel") == 1)
+        {
+            LoadScene("MainMenu");
             MenuBehavior.TheGameState.ResetAll(); //start a new game
 		}
 
@@ -141,7 +149,7 @@ public class LevelBehavior : MonoBehaviour
     {
         //GameObject[] projectiles = GameObject.FindGameObjectsWithTag("Projectile");
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        statusText.text = "Status: " + enemies.Length + " moogle";
+        statusText.text = enemies.Length + " moogle";
         if (enemies.Length != 1)
             statusText.text += "s";
         statusText.text += " left!";

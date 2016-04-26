@@ -622,11 +622,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   path: Prefabs/Tileset/
-  width: 10
   height: 10
-  randomFlipX: 0
+  width: 10
   randomFlipY: 0
-  randomizeMode: 1
+  randomFlipX: 0
+  randomizeY: 0
+  randomizeX: 0
   tilesHigh: 3
   tilesWide: 3
   tileToSpawn: {fileID: 0}

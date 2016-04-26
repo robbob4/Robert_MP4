@@ -26,6 +26,8 @@ public class MenuBehavior : MonoBehaviour
     private GameObject[] menuElements;
     private static GlobalGameManager globalGameManager = null;
     private Tiling tiler = null;
+    private int quitDelay = 80; //number of frames to hold esc/back to quit
+    private int quitDelayCount = 80;
     #endregion
 
     // Called even if the script component is not enableds
@@ -73,17 +75,20 @@ public class MenuBehavior : MonoBehaviour
         if (tiler == null)
             Debug.LogError("Tiler not found.");
         else //tile the world
-            tiler.TileWorld("Prefabs/Tileset/Tile_Roof_", 11.8f, 11.8f, false, false);
+            tiler.TileWorld("Prefabs/Tileset/Tile_Roof_", 10.0f, 10.0f, false, false, false, false, 3, 3);
         #endregion
     }
 
     //Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.Escape))
+        //if (Input.GetKey(KeyCode.Escape))
+        if (Input.GetAxis("Cancel") == 1)
         {
+            if (quitDelayCount-- <= 0)
+                QuitButtonService();
+
             //show buttons and props but no credits
-            
             for (int i = 0; i < menuElements.Length; i++)
             {
                 if (menuElements[i].name == "Credits")
@@ -91,6 +96,16 @@ public class MenuBehavior : MonoBehaviour
                 else
                     menuElements[i].SetActive(true);
             }
+        }
+        else
+        {
+            //reset quit delay
+            quitDelayCount = quitDelay;
+        }
+
+        if (Input.GetAxis("Submit") == 1)
+        {
+            StartButtonService();
         }
     }
 

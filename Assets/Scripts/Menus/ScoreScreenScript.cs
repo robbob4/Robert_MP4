@@ -18,7 +18,7 @@ using UnityEngine.UI;
 public class ScoreScreenScript : MonoBehaviour
 {
     #region Variables
-    public const float SCENE_DURATION = 5.0f; // in seconds
+    public const float SCENE_DURATION = 6.0f; // in seconds
     [SerializeField] private string nextLevel = "LevelOne";
     [SerializeField] private Sprite newStarSprite = null;
 
@@ -53,7 +53,7 @@ public class ScoreScreenScript : MonoBehaviour
         if (tiler == null)
             Debug.LogError("Tiler not found.");
         else //tile the world
-            tiler.TileWorld("Prefabs/Tileset/Tile_Roof_", 11.8f, 11.8f, false, false);
+            tiler.TileWorld("Prefabs/Tileset/Tile_Roof_", 10.0f, 10.0f, false, false, false, true, 3, 3);
         #endregion
 
         //set timer
@@ -63,6 +63,10 @@ public class ScoreScreenScript : MonoBehaviour
         lastScore = MenuBehavior.TheGameState.GetLastScore();
         totalScore = MenuBehavior.TheGameState.GetTotalScore();
         lastTime = MenuBehavior.TheGameState.GetLastTime();
+        int level = MenuBehavior.TheGameState.GetLastLevel();
+
+        //echo level complete
+        scoreText.text = "Level " + level + " complete!";
     }
 	
 	//Update is called once per frame
@@ -76,7 +80,6 @@ public class ScoreScreenScript : MonoBehaviour
                 updateStar("Star1");
 
             progress++;
-            scoreText.text += ".";
         }
 
         //count down for star 2
@@ -86,7 +89,6 @@ public class ScoreScreenScript : MonoBehaviour
                 updateStar("Star2");
 
             progress++;
-            scoreText.text += ".";
         }
 
         //count down for star 3
@@ -102,7 +104,7 @@ public class ScoreScreenScript : MonoBehaviour
                 scoreText.text += "!\n";
             else
                 scoreText.text += ".\n";
-            scoreText.text += "Total score is now: " + totalScore + ".";
+            scoreText.text += "Total score is now " + totalScore + ".";
         }
         #endregion
 
@@ -111,10 +113,11 @@ public class ScoreScreenScript : MonoBehaviour
             LoadScene(nextLevel);
 
         #region Escape to Main Menu
-        if (progress > 2 && Input.GetKey(KeyCode.Escape))
+        //if (progress > 2 && Input.GetKey(KeyCode.Escape))
+        if (progress > 2 && Input.GetAxis("Cancel") == 1) 
         {
             LoadScene("MainMenu");
-            MenuBehavior.TheGameState.ResetAll();
+            MenuBehavior.TheGameState.ResetAll(); //start a new game
         }
             
         #endregion

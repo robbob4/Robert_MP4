@@ -9,7 +9,7 @@
 // ----------------------------------------------------------------------------
 // Notes - Assumes prefabs end with names like TL, TM, TR, ML, MM, MR, BL, BM, 
 // BR for things like top right, bottom right, etc. Vertical component must 
-// come first (unless tilesHigh = 0).
+// come first (unless tilesHigh = 0). Priority to T/L and then B/R.
 // ----------------------------------------------------------------------------
 
 using UnityEngine;
@@ -20,13 +20,14 @@ public class Tiling : MonoBehaviour
 {
     #region Tileset variables
     [SerializeField] private string path = "Prefabs/Tileset/";
-    [SerializeField] private float width = 10.0f;
     [SerializeField] private float height = 10.0f;
-    [SerializeField] private bool randomFlipX = false;
+    [SerializeField] private float width = 10.0f;
     [SerializeField] private bool randomFlipY = false;
-    [SerializeField] private bool randomizeMode = true;
-    [SerializeField] private int tilesHigh = 3; //0-3 changes what tiles to load
-    [SerializeField] private int tilesWide = 3; //0-3 changes what tiles to load
+    [SerializeField] private bool randomFlipX = false;
+    [SerializeField] private bool randomizeY = false;
+    [SerializeField] private bool randomizeX = false;
+    [SerializeField] private int tilesHigh = 1; //0-3 changes what tiles to load
+    [SerializeField] private int tilesWide = 1; //0-3 changes what tiles to load
     #endregion
 
     #region References
@@ -64,10 +65,11 @@ public class Tiling : MonoBehaviour
             {
                 string tempPath = path;
                 int rand = 0;
-                
-                if (randomizeMode)
+
+                //height
+                if (randomizeY)
                 {
-                    rand = Mathf.RoundToInt(Random.Range((Mathf.RoundToInt(tilesHigh / 3.0f) - 1), (tilesHigh))); //-1-2
+                    rand = Mathf.RoundToInt(Random.Range((Mathf.CeilToInt(tilesHigh / 3.0f) - 1), (tilesHigh))); //-1-2
                     if (rand == 0)
                         tempPath += "T";
                     else if (rand == 1)
@@ -75,7 +77,40 @@ public class Tiling : MonoBehaviour
                     else if (rand == 2)
                         tempPath += "M";
 
-                    rand = Mathf.RoundToInt(Random.Range((Mathf.RoundToInt(tilesWide / 3.0f) - 1), (tilesWide))); //-1-2
+                    
+                }
+                else
+                {
+                    if (curPos.y + height >= max.y) //top
+                    {
+                        if (tilesHigh >= 1)
+                            tempPath += "T";
+                        //Debug.Log("top at " + curPos.x + "," + curPos.y + " (" + max.x + "," + max.y + ")");
+                    }
+                    else if (curPos.y - height < -max.y) //bottom
+                    {
+                        if (tilesHigh >= 2)
+                            tempPath += "B";
+                        else if (tilesHigh >= 1)
+                            tempPath += "T";
+                        //Debug.Log("bottom at " + curPos.x + "," + curPos.y + " (" + max.x + "," + max.y + ")");
+                    }
+                    else //middle
+                    {
+                        if (tilesHigh >= 3)
+                            tempPath += "M";
+                        else if (tilesHigh >= 2)
+                            tempPath += "B";
+                        else if (tilesHigh >= 1)
+                            tempPath += "T";
+                        //Debug.Log("middle at " + curPos.x + "," + curPos.y + " (" + max.x + "," + max.y + ")");
+                    }
+                }
+
+                //width
+                if (randomizeX)
+                {
+                    rand = Mathf.RoundToInt(Random.Range((Mathf.CeilToInt(tilesWide / 3.0f) - 1), (tilesWide))); //-1-2
                     if (rand == 0)
                         tempPath += "L";
                     else if (rand == 1)
@@ -85,21 +120,30 @@ public class Tiling : MonoBehaviour
                 }
                 else
                 {
-                    //TODO: fix this
-                    if (curPos.y >= (int)max.y + height / 2 && curPos.x >= (int)max.x + width / 2)
-                        tempPath += "BR";
-                    else if (curPos.y == (int)min.y && curPos.x >= (int)max.x + width / 2)
-                        tempPath += "TR";
-                    else if (curPos.y >= (int)min.y + height / 2 && curPos.x == (int)min.x)
-                        tempPath += "BL";
-                    else if (curPos.y == (int)min.y && curPos.x == (int)min.x)
-                        tempPath += "TL";
-                    else if (curPos.y == (int)min.y)
-                        tempPath += "T";
-                    else if (curPos.y >= (int)max.y + height / 2)
-                        tempPath += "B";
-                    else
-                        tempPath += "B";
+                    if (curPos.x - height < -max.x) //left
+                    {
+                        if (tilesHigh >= 1)
+                            tempPath += "L";
+                        //Debug.Log("left at " + curPos.x + "," + curPos.y + " (" + max.x + "," + max.y + ")");
+                    }
+                    else if (curPos.x + height >= max.x) //right
+                    {
+                        if (tilesHigh >= 2)
+                            tempPath += "R";
+                        else if (tilesHigh >= 1)
+                            tempPath += "L";
+                        //Debug.Log("right at " + curPos.x + "," + curPos.y + " (" + max.x + "," + max.y + ")");
+                    }
+                    else //middle
+                    {
+                        if (tilesHigh >= 3)
+                            tempPath += "M";
+                        else if (tilesHigh >= 2)
+                            tempPath += "R";
+                        else if (tilesHigh >= 1)
+                            tempPath += "L";
+                        //Debug.Log("middle at " + curPos.x + "," + curPos.y + " (" + max.x + "," + max.y + ")");
+                    }
                 }
 
                 tileToSpawn = Resources.Load(tempPath) as GameObject;
@@ -138,36 +182,37 @@ public class Tiling : MonoBehaviour
 
     #region Overloads
     // Overloaded for a path, width, and height change
-    public void TileWorld(string pathChange, float w, float h)
+    public void TileWorld(string pathChange, float h, float w)
     {
         path = pathChange;
-        width = w;
         height = h;
+        width = w;
         TileWorld();
     }
 
     // Overloaded for a path, width, height, flipX, and flipY change
-    public void TileWorld(string pathChange, float w, float h, bool x, bool y)
+    public void TileWorld(string pathChange, float h, float w, bool flipY, bool flipX)
     {
         path = pathChange;
-        width = w;
         height = h;
-        randomFlipX = x;
-        randomFlipY = y;
+        width = w;
+        randomFlipY = flipY;
+        randomFlipX = flipX;
         TileWorld();
     }
 
     // Overloaded for a path, width, height, flipX, flipY, randomizeMode, tilesHigh, and tilesWide change
-    public void TileWorld(string pathChange, float w, float h, bool x, bool y, bool random, int high, int wide)
+    public void TileWorld(string pathChange, float h, float w, bool flipY, bool flipX, bool randomY, bool randomX, int tilesHigh, int tilesWide)
     {
         path = pathChange;
-        width = w;
         height = h;
-        randomFlipX = x;
-        randomFlipY = y;
-        randomizeMode = random;
-        tilesHigh = Mathf.Clamp(high, 0, 3);
-        tilesWide = Mathf.Clamp(wide, 0, 3);
+        width = w;
+        randomFlipY = flipY;
+        randomFlipX = flipX;
+        randomizeY = randomY;
+        randomizeX = randomX;
+        this.tilesHigh = Mathf.Clamp(tilesHigh, 0, 3);
+        this.tilesWide = Mathf.Clamp(tilesWide, 0, 3);
         TileWorld();
     }
     #endregion
