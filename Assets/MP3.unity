@@ -85,51 +85,6 @@ NavMeshSettings:
     cellSize: 0.16666667
     manualCellSize: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &5389958
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 5389959}
-  - 114: {fileID: 5389960}
-  m_Layer: 0
-  m_Name: Tiler
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5389959
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 5389958}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1802153510}
-  m_RootOrder: 1
---- !u!114 &5389960
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 5389958}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21b4987e4cede594ab94c9ef0998e842, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  path: Prefabs/Tileset/
-  width: 10
-  height: 10
-  randomFlipX: 0
-  randomFlipY: 0
-  tileToSpawn: {fileID: 0}
 --- !u!1 &108564092
 GameObject:
   m_ObjectHideFlags: 0
@@ -232,6 +187,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 113105446}
   - 114: {fileID: 113105447}
+  - 114: {fileID: 113105448}
+  - 114: {fileID: 113105449}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -262,10 +219,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1c81bbf2559d7e4da4580e57a5ae9db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Movement: 0
-  initialSpawn: 10
+  EnemySpawnInterval: 9
+  Movement: 1
+  Spawning: 0
   EnemyToSpawn: {fileID: 0}
   Score: 0
+--- !u!114 &113105448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 113105445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21b4987e4cede594ab94c9ef0998e842, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  path: Prefabs/Tileset/
+  width: 10
+  height: 10
+  randomFlipX: 0
+  randomFlipY: 0
+  tileToSpawn: {fileID: 0}
+--- !u!114 &113105449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 113105445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a59575e908a46f468eab697381b77d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &120049174
 GameObject:
   m_ObjectHideFlags: 0
@@ -339,7 +325,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 20
-  recastDelay: 10
+  MaxCharges: 6
+  RechargeDelay: 40
+  RecastDelay: 20
   Projectile: {fileID: 0}
 --- !u!95 &120049178
 Animator:
@@ -763,6 +751,5 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 113105446}
-  - {fileID: 5389959}
   m_Father: {fileID: 0}
   m_RootOrder: 0

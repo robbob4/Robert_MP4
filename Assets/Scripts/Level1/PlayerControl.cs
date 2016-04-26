@@ -31,24 +31,29 @@ public class PlayerControl : MonoBehaviour
     #endregion
 
     #region Projectile variables
-    [SerializeField] private int recastDelay = 10; //number of frames to be able to fire a projectile
-    private int delayCount = 0;
+    public int MaxCharges = 6; // max number of stored charges
+    public int RechargeDelay = 40; //number of frames to be able to recharge a projectile
+    public int RecastDelay = 20; //number of frames to be able to cast a projectile
+
+    private int charges = 6; //current number of charges
+    private int recastDelayCount = 0; //current recast delay
+    private int rechargeDelayCount = 0; //current recharge delay
     #endregion
 
     #region Other references
     public GameObject Projectile = null;
-    private LevelBehavior levelBehavior = null;
+    private WorldBound sceneBoundary = null;
     #endregion
-    
+
     // Use this for initialization
     //assumes this has a sprite renderer and 4 facing directions named in order
     void Start ()
     {
         #region References
-        levelBehavior = GameObject.Find("GameManager").GetComponent<LevelBehavior>();
-        if (levelBehavior == null)
+        sceneBoundary = GameObject.Find("GameManager").GetComponent<WorldBound>();
+        if (sceneBoundary == null)
         {
-            Debug.LogError("GameManager not found for " + this + ".");
+            Debug.LogError("WorldBound not found for levelManager in " + this + ".");
             Application.Quit();
         }
 
@@ -57,6 +62,11 @@ public class PlayerControl : MonoBehaviour
             Projectile = Resources.Load("Prefabs/Projectile") as GameObject;
         if (Projectile == null)
             Debug.LogError("Projectile not found for " + this + ".");
+        #endregion
+
+        #region Get data from GlobalGameManager
+        //increase rechargeDelay 4 * level
+        RechargeDelay += (MenuBehavior.TheGameState.GetLastLevel() + 1) * 4;
         #endregion
     }
 
@@ -72,14 +82,27 @@ public class PlayerControl : MonoBehaviour
         //transform.Rotate(transform.forward, - xAxis * Time.deltaTime * turnSpeed);
 
         //clamp to world
-        levelBehavior.ClampToWorld(transform, 5.0f);
+        sceneBoundary.ClampToWorld(transform, 5.0f);
+        #endregion
+
+        #region Recharge charges
+        //increase number of charges if delay is up and not at max already
+        if (rechargeDelayCount-- <= 0 && charges < MaxCharges)
+        {
+            charges++;
+            rechargeDelayCount = RechargeDelay;
+            //Debug.Log(charges + "/" + MaxCharges);
+        }
         #endregion
 
         #region Fire projectile
         if (Input.GetAxis("Fire1") > 0f) //Left-Control
         {
-            if(delayCount-- <= 0 && Projectile != null)
+            //check if recast delay is up, there is a charge, and projectile loaded
+            if (recastDelayCount-- <= 0 && charges > 0 && Projectile != null)
             {
+                //Debug.Log(charges + "/" + MaxCharges + " " + recastDelayCount + "/" + RecastDelay);
+                charges--;
                 GameObject e = Instantiate(Projectile) as GameObject;
                 ProjectileMovement proj = e.GetComponent<ProjectileMovement>();
                 if (null != proj)
@@ -105,14 +128,10 @@ public class PlayerControl : MonoBehaviour
                     
                 }
 
-                delayCount = recastDelay;
+                recastDelayCount = RecastDelay;
             }
         }
         #endregion
-
-        //Toggle movement
-        if (Input.GetButtonUp("Jump"))
-            levelBehavior.Movement = !levelBehavior.Movement;
 
         //Update facing
         updateFacing(xAxis, yAxis);

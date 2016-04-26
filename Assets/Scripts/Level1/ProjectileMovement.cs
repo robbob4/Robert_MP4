@@ -15,18 +15,17 @@ public class ProjectileMovement : MonoBehaviour
 {
     [SerializeField] private float speed = 100.0f;
 
-    private LevelBehavior levelBehavior = null;
+    private WorldBound sceneBoundary = null;
 
     // Use this for initialization
     void Start ()
     {
-        levelBehavior = GameObject.Find("GameManager").GetComponent<LevelBehavior>();
-        if (levelBehavior == null)
+        sceneBoundary = GameObject.Find("GameManager").GetComponent<WorldBound>();
+        if (sceneBoundary == null)
         {
-            Debug.LogError("GameManager not found for " + this + ".");
+            Debug.LogError("WorldBound not found for levelManager in " + this + ".");
             Application.Quit();
         }
-            
     }
 	
 	// Update is called once per frame
@@ -36,9 +35,9 @@ public class ProjectileMovement : MonoBehaviour
         transform.position += (speed * Time.smoothDeltaTime) * transform.up;
 
         //check boundary collision
-        LevelBehavior.WorldBoundStatus status =
-            levelBehavior.ObjectCollideWorldBound(GetComponent<Renderer>().bounds);
-        if (status != LevelBehavior.WorldBoundStatus.Inside)
+        WorldBound.WorldBoundStatus status =
+            sceneBoundary.ObjectCollideWorldBound(GetComponent<Renderer>().bounds);
+        if (status != WorldBound.WorldBoundStatus.Inside)
         {
             //Debug.Log("collided position: " + this.transform.position);
             Destroy(gameObject);

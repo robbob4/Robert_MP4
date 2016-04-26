@@ -396,7 +396,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: b51a3e520f9164da198dc59c8acfccd6, type: 3}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 0
@@ -469,7 +469,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: b51a3e520f9164da198dc59c8acfccd6, type: 3}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 0
@@ -499,8 +499,10 @@ GameObject:
   m_Component:
   - 4: {fileID: 558020170}
   - 114: {fileID: 558020171}
+  - 114: {fileID: 558020172}
+  - 114: {fileID: 558020173}
   m_Layer: 0
-  m_Name: MenuLevelManager
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -529,9 +531,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f74745ad36de24913a68011d4bcc34c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LevelName: 
-  mLevelOneButton: {fileID: 0}
-  mLevelTwoButton: {fileID: 0}
+  LevelOneButton: {fileID: 0}
+  LevelTwoButton: {fileID: 0}
+--- !u!114 &558020172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 558020169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21b4987e4cede594ab94c9ef0998e842, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  path: Prefabs/Tileset/
+  width: 10
+  height: 10
+  randomFlipX: 0
+  randomFlipY: 0
+  tileToSpawn: {fileID: 0}
+--- !u!114 &558020173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 558020169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a59575e908a46f468eab697381b77d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1065348725
 GameObject:
   m_ObjectHideFlags: 0
@@ -586,7 +615,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: b51a3e520f9164da198dc59c8acfccd6, type: 3}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 0
@@ -598,7 +627,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Level 1
+  m_Text: Start Game
 --- !u!222 &1065348728
 CanvasRenderer:
   m_ObjectHideFlags: 0

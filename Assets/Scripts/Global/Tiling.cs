@@ -23,37 +23,30 @@ public class Tiling : MonoBehaviour
     [SerializeField] private float height = 10.0f;
     [SerializeField] private bool randomFlipX = false;
     [SerializeField] private bool randomFlipY = false;
-    
+    #endregion
+
+    #region References
     [HideInInspector] public GameObject tileToSpawn = null;
+    private WorldBound sceneBoundary = null;
     #endregion
 
-    #region Other references
-    private LevelBehavior levelBehavior = null;
-    #endregion
-
-    // Use this for initialization
-    void Start ()
+    void Awake ()
     {
-        levelBehavior = GameObject.Find("GameManager").GetComponent<LevelBehavior>();
-        if (levelBehavior == null)
+        sceneBoundary = GameObject.Find("GameManager").GetComponent<WorldBound>();
+        if (sceneBoundary == null)
         {
             Debug.LogError("GameManager not found for " + this + ".");
             Application.Quit();
         }
     }
-	
-	// Update is called once per frame
-	void Update ()
-    {
 
-    }
-
+    #region TileWorld functions
     // Actually place the tiles
     public void TileWorld()
     {
-        Vector3 max = levelBehavior.WorldMax;
-        Vector3 min = levelBehavior.WorldMin;
-        Vector3 curPos = levelBehavior.WorldMin;
+        Vector3 max = sceneBoundary.WorldMax;
+        Vector3 min = sceneBoundary.WorldMin;
+        Vector3 curPos = sceneBoundary.WorldMin;
 
         //Debug.Log(min.x + " " + max.x + " " + (0 + (int)width));
         //Debug.Log(min.y + " " + max.y + " " + (0 + (int)height));
@@ -140,4 +133,5 @@ public class Tiling : MonoBehaviour
         randomFlipY = y;
         TileWorld();
     }
+    #endregion
 }
