@@ -240,6 +240,8 @@ MonoBehaviour:
   height: 10
   randomFlipX: 0
   randomFlipY: 0
+  tilesHigh: 2
+  tilesWide: 0
   tileToSpawn: {fileID: 0}
 --- !u!114 &113105449
 MonoBehaviour:

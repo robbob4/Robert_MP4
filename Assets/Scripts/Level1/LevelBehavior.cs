@@ -18,7 +18,7 @@ public class LevelBehavior : MonoBehaviour
 {
     #region Support for runtime enemy creation
     public float EnemySpawnInterval = 9.0f; // in seconds
-    public bool Movement = true; //bool for movement and spawning of enemies
+    public bool Movement = true; //bool for movement of enemies
     public bool Spawning = false; //bool for spawning of enemies
     
     [HideInInspector] public GameObject EnemyToSpawn = null;

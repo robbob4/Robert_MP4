@@ -7,8 +7,9 @@
 // Process starts at world min and works upward along the y axis first. 
 // Automatically loads the prefabs in the path specified.
 // ----------------------------------------------------------------------------
-// Notes - Assumes prefabs end with names like TR, BR, B, T for things like
-// top right, bottom right, bottom, top designations.
+// Notes - Assumes prefabs end with names like TL, TM, TR, ML, MM, MR, BL, BM, 
+// BR for things like top right, bottom right, etc. Vertical component must 
+// come first (unless tilesHigh = 0).
 // ----------------------------------------------------------------------------
 
 using UnityEngine;
@@ -23,6 +24,9 @@ public class Tiling : MonoBehaviour
     [SerializeField] private float height = 10.0f;
     [SerializeField] private bool randomFlipX = false;
     [SerializeField] private bool randomFlipY = false;
+    [SerializeField] private bool randomizeMode = true;
+    [SerializeField] private int tilesHigh = 3; //0-3 changes what tiles to load
+    [SerializeField] private int tilesWide = 3; //0-3 changes what tiles to load
     #endregion
 
     #region References
@@ -30,17 +34,17 @@ public class Tiling : MonoBehaviour
     private WorldBound sceneBoundary = null;
     #endregion
 
-    void Awake ()
+    void Awake()
     {
         sceneBoundary = GameObject.Find("GameManager").GetComponent<WorldBound>();
         if (sceneBoundary == null)
         {
-            Debug.LogError("GameManager not found for " + this + ".");
+            Debug.LogError("GameManager's WorldBound not found for " + this + ".");
             Application.Quit();
         }
     }
 
-    #region TileWorld functions
+    #region Tiling
     // Actually place the tiles
     public void TileWorld()
     {
@@ -53,33 +57,50 @@ public class Tiling : MonoBehaviour
 
         int count = 0;
 
-        //span the viewable space
+        //span the viewable space starting at bottom left going up then right
         for (; curPos.x < max.x; curPos.x += (int)width)
         {
             for (; curPos.y < max.y; curPos.y += (int)height)
             {
-                //determine the tile
                 string tempPath = path;
-                //if (curPos.y >= (int)max.y + height / 2 && curPos.x >= (int)max.x + width / 2)
-                //    tileToSpawn = Resources.Load(path + "BR") as GameObject;
-                //else if (curPos.y == (int)min.y && curPos.x >= (int)max.x + width / 2)
-                //    tileToSpawn = Resources.Load(path + "TR") as GameObject;
-                //else if (curPos.y >= (int)min.y + height / 2 && curPos.x == (int)min.x)
-                //    tileToSpawn = Resources.Load(path + "BL") as GameObject;
-                //else if (curPos.y == (int)min.y && curPos.x == (int)min.x)
-                //    tileToSpawn = Resources.Load(path + "TL") as GameObject;
-                //else if (curPos.y == (int)min.y)
-                //    tileToSpawn = Resources.Load(path + "T") as GameObject;
-                //else if (curPos.y >= (int)max.y + height / 2)
-                //    tileToSpawn = Resources.Load(path + "B") as GameObject;
-                //else
-                //    tileToSpawn = Resources.Load(path + "B") as GameObject;
+                int rand = 0;
+                
+                if (randomizeMode)
+                {
+                    rand = Mathf.RoundToInt(Random.Range((Mathf.RoundToInt(tilesHigh / 3.0f) - 1), (tilesHigh))); //-1-2
+                    if (rand == 0)
+                        tempPath += "T";
+                    else if (rand == 1)
+                        tempPath += "B";
+                    else if (rand == 2)
+                        tempPath += "M";
 
-                int rand = Mathf.RoundToInt(Random.Range(0, 2)); //0-1
-                if (rand == 0)
-                    tempPath += "B";
+                    rand = Mathf.RoundToInt(Random.Range((Mathf.RoundToInt(tilesWide / 3.0f) - 1), (tilesWide))); //-1-2
+                    if (rand == 0)
+                        tempPath += "L";
+                    else if (rand == 1)
+                        tempPath += "R";
+                    else if (rand == 2)
+                        tempPath += "M";
+                }
                 else
-                    tempPath += "T";
+                {
+                    //TODO: fix this
+                    if (curPos.y >= (int)max.y + height / 2 && curPos.x >= (int)max.x + width / 2)
+                        tempPath += "BR";
+                    else if (curPos.y == (int)min.y && curPos.x >= (int)max.x + width / 2)
+                        tempPath += "TR";
+                    else if (curPos.y >= (int)min.y + height / 2 && curPos.x == (int)min.x)
+                        tempPath += "BL";
+                    else if (curPos.y == (int)min.y && curPos.x == (int)min.x)
+                        tempPath += "TL";
+                    else if (curPos.y == (int)min.y)
+                        tempPath += "T";
+                    else if (curPos.y >= (int)max.y + height / 2)
+                        tempPath += "B";
+                    else
+                        tempPath += "B";
+                }
 
                 tileToSpawn = Resources.Load(tempPath) as GameObject;
 
@@ -113,7 +134,9 @@ public class Tiling : MonoBehaviour
             curPos.y = min.y;
         }
     }
+    #endregion
 
+    #region Overloads
     // Overloaded for a path, width, and height change
     public void TileWorld(string pathChange, float w, float h)
     {
@@ -131,6 +154,20 @@ public class Tiling : MonoBehaviour
         height = h;
         randomFlipX = x;
         randomFlipY = y;
+        TileWorld();
+    }
+
+    // Overloaded for a path, width, height, flipX, flipY, randomizeMode, tilesHigh, and tilesWide change
+    public void TileWorld(string pathChange, float w, float h, bool x, bool y, bool random, int high, int wide)
+    {
+        path = pathChange;
+        width = w;
+        height = h;
+        randomFlipX = x;
+        randomFlipY = y;
+        randomizeMode = random;
+        tilesHigh = Mathf.Clamp(high, 0, 3);
+        tilesWide = Mathf.Clamp(wide, 0, 3);
         TileWorld();
     }
     #endregion

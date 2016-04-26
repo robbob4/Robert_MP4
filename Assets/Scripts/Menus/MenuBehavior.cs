@@ -18,9 +18,12 @@ using UnityEngine.UI;
 public class MenuBehavior : MonoBehaviour
 {
     #region Variables
-    public Button LevelOneButton;
-    public Button LevelTwoButton;
+    public bool Movement = true; //bool for movement of enemies
+    [HideInInspector] public Button StartButton;
+    [HideInInspector] public Button CreditsButton;
+    [HideInInspector] public Button QuitButton;
 
+    private GameObject[] menuElements;
     private static GlobalGameManager globalGameManager = null;
     private Tiling tiler = null;
     #endregion
@@ -39,16 +42,30 @@ public class MenuBehavior : MonoBehaviour
     {
         #region Button init
         //find buttons
-        LevelOneButton = GameObject.Find("ButtonLevel1").GetComponent<Button>();
-        if (LevelOneButton == null)
-            Debug.LogError("ButtonLevel1 not found.");
-        LevelTwoButton = GameObject.Find("ButtonCredits").GetComponent<Button>();
-        if (LevelTwoButton == null)
+        StartButton = GameObject.Find("ButtonStart").GetComponent<Button>();
+        if (StartButton == null)
+            Debug.LogError("ButtonStart not found.");
+        CreditsButton = GameObject.Find("ButtonCredits").GetComponent<Button>();
+        if (CreditsButton == null)
             Debug.LogError("ButtonCredits not found.");
+        QuitButton = GameObject.Find("ButtonQuit").GetComponent<Button>();
+        if (QuitButton == null)
+            Debug.LogError("ButtonQuit not found.");
 
         //add listeners to the buttons
-        LevelOneButton.onClick.AddListener(ButtonOneService);
-        LevelTwoButton.onClick.AddListener(ButtonTwoService);
+        StartButton.onClick.AddListener(StartButtonService);
+        CreditsButton.onClick.AddListener(CreditsButtonService);
+        QuitButton.onClick.AddListener(QuitButtonService);
+        #endregion
+
+        #region Hide credits
+        menuElements = GameObject.FindGameObjectsWithTag("UI");
+
+        for (int i = 0; i < menuElements.Length; i++)
+        {
+            if (menuElements[i].name == "Credits")
+                menuElements[i].SetActive(false);
+        }
         #endregion
 
         #region Tile the background
@@ -56,30 +73,53 @@ public class MenuBehavior : MonoBehaviour
         if (tiler == null)
             Debug.LogError("Tiler not found.");
         else //tile the world
-            tiler.TileWorld("Prefabs/Tileset/Tile_White_", 11.8f, 11.8f, false, false);
+            tiler.TileWorld("Prefabs/Tileset/Tile_Roof_", 11.8f, 11.8f, false, false);
         #endregion
     }
 
     //Update is called once per frame
     void Update()
     {
-
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            //show buttons and props but no credits
+            
+            for (int i = 0; i < menuElements.Length; i++)
+            {
+                if (menuElements[i].name == "Credits")
+                    menuElements[i].SetActive(false);
+                else
+                    menuElements[i].SetActive(true);
+            }
+        }
     }
 
     #region Button service functions
-    private void ButtonOneService()
+    private void StartButtonService()
     {
 		LoadScene("MP3");
 	}
 
-	private void ButtonTwoService()
+	private void CreditsButtonService()
     {
-		LoadScene("Credits");
+        //hide buttons and props but show credits
+        for (int i = 0; i < menuElements.Length; i++)
+        {
+            if(menuElements[i].name == "Credits")
+                menuElements[i].SetActive(true);
+            else
+                menuElements[i].SetActive(false);
+        }
 	}
-	#endregion
+
+    private void QuitButtonService()
+    {
+        Application.Quit(); //only works in build - not debug
+    }
+    #endregion
 
     //Change scene support
-	void LoadScene(string theLevel)
+    void LoadScene(string theLevel)
     {
 		SceneManager.LoadScene(theLevel);
 		globalGameManager.SetCurrentLevel(theLevel);
