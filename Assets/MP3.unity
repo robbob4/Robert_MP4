@@ -263,7 +263,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Movement: 0
-  initialSpawn: 50
+  initialSpawn: 10
   EnemyToSpawn: {fileID: 0}
   Score: 0
 --- !u!1 &120049174

@@ -13,8 +13,11 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement; //scene manager
 
-public class GlobalBehavior : MonoBehaviour {
+public class LevelBehavior : MonoBehaviour {
+
+	//private GlobalGameManager globalGameManager = null;
 
     #region World Bound support
     private Bounds worldBounds;  // this is the world bound
@@ -45,6 +48,9 @@ public class GlobalBehavior : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+		
+		//globalGameManager = GameObject.Find("GlobalManager").GetComponent<GlobalGameManager>(); 
+
         #region World bound support
         mainCamera = Camera.main;
         worldBounds = new Bounds(Vector3.zero, Vector3.one);
@@ -81,6 +87,11 @@ public class GlobalBehavior : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+		// change scene to main menu if escape key pressed
+		if (Input.GetKey (KeyCode.Escape)) {
+			LoadScene("MainMenuScene");
+		}
+
         //spawn enemies perodically if movement enabled
         if (Movement)
             SpawnAnEnemy(false);
@@ -201,6 +212,9 @@ public class GlobalBehavior : MonoBehaviour {
         statusText.text += " " + projectiles.Length + " fireball";
         if (projectiles.Length != 1)
             statusText.text += "s";
+
+		if (enemies.Length == 0)
+			LoadScene ("MP3");  //TODO: load score screen
     }
 
     private void updateScore()
@@ -208,4 +222,12 @@ public class GlobalBehavior : MonoBehaviour {
         scoreText.text = "Score: " + Score;
     }
     #endregion
+
+	#region Level support
+	void LoadScene(string theLevel) {
+		SceneManager.LoadScene(theLevel);
+		MenuBehavior.TheGameState.SetCurrentLevel(theLevel);
+		//MenuBehavior.TheGameState.TheGameState.PrintCurrentLevel();
+	}
+	#endregion
 }
