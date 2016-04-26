@@ -28,14 +28,14 @@ public class Tiling : MonoBehaviour
     #endregion
 
     #region Other references
-    private GlobalBehavior globalBehavior = null;
+    private LevelBehavior levelBehavior = null;
     #endregion
 
     // Use this for initialization
     void Start ()
     {
-        globalBehavior = GameObject.Find("GameManager").GetComponent<GlobalBehavior>();
-        if (globalBehavior == null)
+        levelBehavior = GameObject.Find("GameManager").GetComponent<LevelBehavior>();
+        if (levelBehavior == null)
         {
             Debug.LogError("GameManager not found for " + this + ".");
             Application.Quit();
@@ -51,9 +51,9 @@ public class Tiling : MonoBehaviour
     // Actually place the tiles
     public void TileWorld()
     {
-        Vector3 max = globalBehavior.WorldMax;
-        Vector3 min = globalBehavior.WorldMin;
-        Vector3 curPos = globalBehavior.WorldMin;
+        Vector3 max = levelBehavior.WorldMax;
+        Vector3 min = levelBehavior.WorldMin;
+        Vector3 curPos = levelBehavior.WorldMin;
 
         //Debug.Log(min.x + " " + max.x + " " + (0 + (int)width));
         //Debug.Log(min.y + " " + max.y + " " + (0 + (int)height));
