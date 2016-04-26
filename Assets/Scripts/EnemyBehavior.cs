@@ -35,7 +35,7 @@ public class EnemyBehavior : MonoBehaviour {
     #endregion
 
     #region Enemy movement variables
-    public const int DELAY = 50; //number of frames to delay running redirection when near a boundary
+    public const int DELAY = 40; //number of frames to delay running redirection when near a boundary
     public float Speed = 30.0f;
     public float TurnSpeed = 9.0f;
     [SerializeField] private float minSpeed = 20.0f;
@@ -45,7 +45,7 @@ public class EnemyBehavior : MonoBehaviour {
         // 0: no control
         // 1: always towards the world center, no randomness
 
-    private int currentDelay = 0;
+    private int boundaryBumpDelay = 0; //delay if hit a wall
     private GlobalBehavior globalBehavior = null;
     private GameObject player = null;
     private PlayerControl playerController = null;
@@ -87,6 +87,12 @@ public class EnemyBehavior : MonoBehaviour {
             if (deathDelay == 0)
                 Destroy(gameObject);
         }
+
+        //count down bump off wall delay
+        if (boundaryBumpDelay != 0)
+        {
+            boundaryBumpDelay--;
+        }
             
         //update timer and change state
         updateTimer();
@@ -96,16 +102,15 @@ public class EnemyBehavior : MonoBehaviour {
         if (currentState == EnemyState.Run) //running
         {
             //turn away if not ndelayed by a boundary collision
-            //if (currentDelay-- <= 0 && transform.position.x > globalBehavior.WorldMin.x + buffer &&
+            //if (boundaryBumpDelay-- <= 0 && transform.position.x > globalBehavior.WorldMin.x + buffer &&
             //    transform.position.x < globalBehavior.WorldMax.x - buffer &&
             //    transform.position.y > globalBehavior.WorldMin.y + buffer &&
             //    transform.position.y < globalBehavior.WorldMax.y - buffer)
             //{
-            if (currentDelay-- <= 0 && player != null)
+            if (boundaryBumpDelay <= 0 && player != null)
             {
                 //transform.up = (transform.position - player.transform.position);
-                directionV = (transform.position - player.transform.position);
-                directionV.Normalize();
+                directionV = (transform.position - player.transform.position).normalized; //debug
             }
 
             //move in new direction
@@ -128,7 +133,7 @@ public class EnemyBehavior : MonoBehaviour {
 		if (status != GlobalBehavior.WorldBoundStatus.Inside) {
 		    //Debug.Log("collided position: " + this.transform.position);
 			newDirection();
-            currentDelay = DELAY;
+            boundaryBumpDelay = DELAY;
         }
 
         //clamp to world
@@ -167,9 +172,6 @@ public class EnemyBehavior : MonoBehaviour {
         //destroy projectile
         Destroy(other.gameObject);
 
-        
-        
-
         //decrease lives and destroy if out of lives
         if (--Lives <= 0)
         {
@@ -185,8 +187,7 @@ public class EnemyBehavior : MonoBehaviour {
         {
             //play a hit sound
             GetComponent<AudioSource>().Play();
-        }
-            
+        } 
     }
 
     //determines state between Normal and Run
