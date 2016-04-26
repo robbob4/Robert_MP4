@@ -57,7 +57,7 @@ public class GlobalBehavior : MonoBehaviour {
         if (EnemyToSpawn == null)
             Debug.LogError("Enemy not found.");
 
-        // first 50 enemies
+        // first x enemies
         for (int i = 0; i < initialSpawn; i++)
             SpawnAnEnemy(true);
         #endregion

@@ -114,8 +114,7 @@ public class SpriteUpdateEnemy : MonoBehaviour
             {
                 animateComp.SetTrigger("NewFacing");
             }
-
-
+            
             curState = newState;
         }
 
