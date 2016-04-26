@@ -107,7 +107,7 @@ public class PlayerControl : MonoBehaviour
                 ProjectileMovement proj = e.GetComponent<ProjectileMovement>();
                 if (null != proj)
                 {
-                    e.transform.position = transform.position;
+                    e.transform.position = new Vector3(transform.position.x, transform.position.y + 2, transform.position.z);
 
                     //change projectile direction
                     switch (currentFacing)
@@ -120,6 +120,7 @@ public class PlayerControl : MonoBehaviour
                             break;
                         case Facing.South:
                             proj.SetForwardDirection(-transform.up);
+                            e.GetComponent<SpriteRenderer>().sortingLayerName = "Player"; //put fireball ontop of player
                             break;
                         default:
                             proj.SetForwardDirection(transform.up);
