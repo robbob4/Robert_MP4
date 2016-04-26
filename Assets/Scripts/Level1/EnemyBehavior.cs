@@ -225,7 +225,10 @@ public class EnemyBehavior : MonoBehaviour {
         }
 
         //determine new state
+
         if (distance <= 30 && angle > checkFacingAngle && currentState != EnemyState.Stunned)
+//>>>>>>> sam_branch:Assets/Scripts/Level1/EnemyBehavior.cs
+//>>>>>>> f6306aff30ba3e045f2da4bb72b491ff30836ff7:Assets/Scripts/Level1/EnemyBehavior.cs
         {
             currentState = EnemyState.Run;
         }
