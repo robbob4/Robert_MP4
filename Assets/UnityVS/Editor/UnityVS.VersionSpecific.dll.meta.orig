@@ -1,5 +1,14 @@
 fileFormatVersion: 2
 guid: 48b274fe218954d8ab564cec23c0904c
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+timeCreated: 1461543729
+=======
+timeCreated: 1461642403
+>>>>>>> sam_branch
+licenseType: Free
+>>>>>>> master
 PluginImporter:
   serializedVersion: 1
   iconMap: {}
