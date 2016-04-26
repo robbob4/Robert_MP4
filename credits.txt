@@ -1,6 +1,6 @@
-Created by Robert Griswold
+Created by Robert Griswold and Samuel Williams
 CSS 385
-25 Apr 2016
+26 Apr 2016
 University of Washington Bothell
 
 Bahamut.png - Sithjester http://untamed.wild-refuge.net/rmxpresources.php?characters
@@ -9,8 +9,13 @@ Fireball.png - OpenGameArt http://opengameart.org/content/high-res-fire-ball
 Catish.png - Sithjester http://untamed.wild-refuge.net/rmxpresources.php?characters
 JapaneseVillage.png - Sithjester http://untamed.wild-refuge.net/rmxpresources.php?characters
 JapaneseVillage02.png - Sithjester http://untamed.wild-refuge.net/rmxpresources.php?characters
-Short of Stature, Might of Magic.wav - tweexgaminggeek - http://landofvanadiel.com/lov/music/
+Background.wav - "Short of Stature, Might of Magic" by tweexgaminggeek - http://landofvanadiel.com/lov/music/
 Fireball-woosh.wav - Robinhood76 - http://www.freesound.org/people/Robinhood76/sounds/248116/
 Hit.wav - Created in BFXR - http://www.bfxr.net/
 Hit2.wav - Created in BFXR - http://www.bfxr.net/
 Menu.wav - "Medieval Introduction" by Tristan Lohengrin - http://www.freesound.org/people/Tristan_Lohengrin/sounds/319781/
+LevelUp01.wav - Rhodesmas - http://www.freesound.org/people/rhodesmas/sounds/320655/
+LevelUp02.wav - Rhodesmas - http://www.freesound.org/people/rhodesmas/sounds/320654/
+LevelUp03.wav - Rhodesmas - http://www.freesound.org/people/rhodesmas/sounds/320657/
+Star1.png - Rafaelchm - http://opengameart.org/content/stars-0
+Star2.png - Rafaelchm - http://opengameart.org/content/stars-0

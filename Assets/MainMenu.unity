@@ -1201,10 +1201,10 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: b51a3e520f9164da198dc59c8acfccd6, type: 3}
-    m_FontSize: 20
+    m_FontSize: 17
     m_FontStyle: 1
     m_BestFit: 0
-    m_MinSize: 2
+    m_MinSize: 1
     m_MaxSize: 40
     m_Alignment: 3
     m_AlignByGeometry: 0
@@ -1212,16 +1212,55 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Programming:\nRobert Griswold (University of Washington Bothell)\nSamuel
-    Williams (University of Washington Bothell)\n\nArtwork:\nBahamut.png - Sithjester
-    (untamed.wild-refuge.net)\nMoogle.png - Sithjester (untamed.wild-refuge.net)\nFireball.png
-    - OpenGameArt (opengameart.org)\nCatish.png - Sithjester (untamed.wild-refuge.net)\nJapaneseVillage.png
-    - Sithjester (untamed.wild-refuge.net)\nJapaneseVillage02.png - Sithjester (untamed.wild-refuge.net)\n\nMusic:\nShort
-    of Stature, Might of Magic.wav - Tweexgaminggeek (landofvanadiel.com/lov/music/\r)\nMenu.wav
-    - \"Medieval Introduction\" by Tristan Lohengrin (freesound.org/people/Tristan_Lohengrin)\n\nAudio:\nFireball-woosh.wav
-    - Robinhood76 (www.freesound.org/people/Robinhood76)\nHit.wav - Created in BFXR
-    (bfxr.net)\nHit2.wav - Created in BFXR - (bfxr.net/)\n\n(Press ESC/Back to return
-    to main menu)"
+  m_Text: 'Programming:
+
+    Robert Griswold (University of Washington Bothell)
+
+    Samuel Williams (University of Washington Bothell)
+
+
+    Artwork:
+
+    Bahamut.png - Sithjester (untamed.wild-refuge.net)
+
+    Moogle.png - Sithjester (untamed.wild-refuge.net)
+
+    Fireball.png - OpenGameArt (opengameart.org)
+
+    Catish.png - Sithjester (untamed.wild-refuge.net)
+
+    JapaneseVillage.png - Sithjester (untamed.wild-refuge.net)
+
+    JapaneseVillage02.png - Sithjester (untamed.wild-refuge.net)
+
+    Star1.png - Rafaelchm (opengameart.org)
+
+    Star2.png - Rafaelchm (opengameart.org)
+
+
+    Music:
+
+    Background.wav - "Short of Stature, Might of Magic" by tweexgaminggeek (hlandofvanadiel.com/lov/music/)
+
+    Menu.wav - "Medieval Introduction" by Tristan Lohengrin (freesound.org/people/Tristan_Lohengrin)
+
+
+    Audio:
+
+    Fireball-woosh.wav - Robinhood76 (www.freesound.org/people/Robinhood76)
+
+    Hit.wav - Created in BFXR (bfxr.net)
+
+    Hit2.wav - Created in BFXR (bfxr.net/)
+
+    LevelUp01.wav - Rhodesmas - (freesound.org/people/rhodesmas)
+
+    LevelUp02.wav - Rhodesmas - (freesound.org/people/rhodesmas)
+
+    LevelUp03.wav - Rhodesmas - (freesound.org/people/rhodesmas)
+
+
+    (Press ESC/Back to return to main menu)'
 --- !u!222 &1638129651
 CanvasRenderer:
   m_ObjectHideFlags: 0

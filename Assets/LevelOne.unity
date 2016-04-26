@@ -240,6 +240,7 @@ MonoBehaviour:
   height: 10
   randomFlipX: 0
   randomFlipY: 0
+  randomizeMode: 1
   tilesHigh: 2
   tilesWide: 0
   tileToSpawn: {fileID: 0}
@@ -369,6 +370,7 @@ GameObject:
   - 224: {fileID: 817366371}
   - 222: {fileID: 817366373}
   - 114: {fileID: 817366372}
+  - 114: {fileID: 817366374}
   m_Layer: 5
   m_Name: Score
   m_TagString: UI
@@ -432,6 +434,20 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 817366370}
+--- !u!114 &817366374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 817366370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1573420865, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 3, y: -3}
+  m_UseGraphicAlpha: 1
 --- !u!1 &836502935
 GameObject:
   m_ObjectHideFlags: 0

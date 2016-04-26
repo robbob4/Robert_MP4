@@ -97,7 +97,7 @@ public class MenuBehavior : MonoBehaviour
     #region Button service functions
     private void StartButtonService()
     {
-		LoadScene("MP3");
+		LoadScene("LevelOne");
 	}
 
 	private void CreditsButtonService()
