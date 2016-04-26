@@ -1,6 +1,10 @@
 fileFormatVersion: 2
 guid: 48b274fe218954d8ab564cec23c0904c
+<<<<<<< HEAD
 timeCreated: 1461543729
+=======
+timeCreated: 1461642403
+>>>>>>> sam_branch
 licenseType: Free
 PluginImporter:
   serializedVersion: 1
