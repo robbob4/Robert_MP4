@@ -1,0 +1,31 @@
+fileFormatVersion: 2
+guid: 48b274fe218954d8ab564cec23c0904c
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+timeCreated: 1461543729
+=======
+timeCreated: 1461642403
+>>>>>>> sam_branch
+licenseType: Free
+>>>>>>> master
+PluginImporter:
+  serializedVersion: 1
+  iconMap: {}
+  executionOrder: {}
+  isPreloaded: 0
+  platformData:
+    Any:
+      enabled: 0
+      settings: {}
+    Editor:
+      enabled: 1
+      settings:
+        DefaultValueInitialized: true
+    WindowsStoreApps:
+      enabled: 0
+      settings:
+        CPU: AnyCPU
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

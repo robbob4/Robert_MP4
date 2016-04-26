@@ -214,7 +214,7 @@ public class LevelBehavior : MonoBehaviour {
             statusText.text += "s";
 
 		if (enemies.Length == 0)
-			LoadScene ("MP3");  //TODO: load score screen
+			LoadScene ("ScoreScreen");  //TODO: load score screen
     }
 
     private void updateScore()

@@ -9,3 +9,7 @@ EditorBuildSettings:
     path: Assets/MainMenuScene.unity
   - enabled: 1
     path: Assets/MP3.unity
+  - enabled: 1
+    path: Assets/Credits.unity
+  - enabled: 1
+    path: Assets/ScoreScreen.unity
