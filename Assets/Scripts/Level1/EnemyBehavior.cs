@@ -46,7 +46,7 @@ public class EnemyBehavior : MonoBehaviour {
         // 1: always towards the world center, no randomness
 
     private int boundaryBumpDelay = 0; //delay if hit a wall
-    private GlobalBehavior globalBehavior = null;
+    private LevelBehavior levelBehavior = null;
     private GameObject player = null;
     private PlayerControl playerController = null;
     private Vector3 directionV;
@@ -55,15 +55,15 @@ public class EnemyBehavior : MonoBehaviour {
     // Use this for initialization
     void Start () {
         
-        globalBehavior = GameObject.Find("GameManager").GetComponent<GlobalBehavior>();
-        if (globalBehavior == null)
+        levelBehavior = GameObject.Find("GameManager").GetComponent<LevelBehavior>();
+        if (levelBehavior == null)
         {
             Debug.LogError("GameManager not found for " + this + ".");
             Application.Quit();
         }
 
         player = GameObject.Find("Hero");
-        if (globalBehavior == null)
+        if (levelBehavior == null)
         {
             Debug.LogError("Hero not found for " + this + ".");
         }
@@ -87,7 +87,7 @@ public class EnemyBehavior : MonoBehaviour {
             if (deathDelay == 0)
                 Destroy(gameObject);
         }
-
+            
         //count down bump off wall delay
         if (boundaryBumpDelay != 0)
         {
@@ -121,23 +121,23 @@ public class EnemyBehavior : MonoBehaviour {
         {
             transform.Rotate(transform.forward, Time.deltaTime * TurnSpeed);
         }  
-        else if (globalBehavior.Movement) //normal
+        else if (levelBehavior.Movement) //normal
         {
             //transform.position += (Speed * Time.smoothDeltaTime) * transform.up;
             transform.position += (Speed * Time.smoothDeltaTime) * directionV;
         }
 
         //check boundary collision
-        GlobalBehavior.WorldBoundStatus status =
-		    globalBehavior.ObjectCollideWorldBound(GetComponent<Renderer>().bounds);
-		if (status != GlobalBehavior.WorldBoundStatus.Inside) {
+        LevelBehavior.WorldBoundStatus status =
+		    levelBehavior.ObjectCollideWorldBound(GetComponent<Renderer>().bounds);
+		if (status != LevelBehavior.WorldBoundStatus.Inside) {
 		    //Debug.Log("collided position: " + this.transform.position);
 			newDirection();
             boundaryBumpDelay = DELAY;
         }
 
         //clamp to world
-        globalBehavior.ClampToWorld(transform, 1.0f);
+        levelBehavior.ClampToWorld(transform, 1.0f);
 	}
 
     #region State functions
@@ -175,7 +175,7 @@ public class EnemyBehavior : MonoBehaviour {
         //decrease lives and destroy if out of lives
         if (--Lives <= 0)
         {
-            globalBehavior.Score++;
+            levelBehavior.Score++;
             GetComponent<Renderer>().enabled = false; //hide it to allow the sound to play out
             Destroy(GetComponent<Rigidbody2D>()); //remove collision
             deathDelay = DELAY;
@@ -187,7 +187,7 @@ public class EnemyBehavior : MonoBehaviour {
         {
             //play a hit sound
             GetComponent<AudioSource>().Play();
-        } 
+        }
     }
 
     //determines state between Normal and Run
@@ -255,7 +255,7 @@ public class EnemyBehavior : MonoBehaviour {
     // Lastly, 45-degree is nice because X=Y, we can do this for any angle that is less than 90-degree
     private void newDirection() {
 		// we want to move towards the center of the world
-		Vector2 v = globalBehavior.WorldCenter - new Vector2(transform.position.x, transform.position.y);  
+		Vector2 v = levelBehavior.WorldCenter - new Vector2(transform.position.x, transform.position.y);  
 				// this is vector that will take us back to world center
 		v.Normalize();
 		Vector2 vn = new Vector2(v.y, -v.x); // this is a direciotn that is perpendicular to V

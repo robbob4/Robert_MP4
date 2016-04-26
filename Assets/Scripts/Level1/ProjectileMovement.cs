@@ -15,13 +15,13 @@ public class ProjectileMovement : MonoBehaviour
 {
     [SerializeField] private float speed = 100.0f;
 
-    private GlobalBehavior globalBehavior = null;
+    private LevelBehavior levelBehavior = null;
 
     // Use this for initialization
     void Start ()
     {
-        globalBehavior = GameObject.Find("GameManager").GetComponent<GlobalBehavior>();
-        if (globalBehavior == null)
+        levelBehavior = GameObject.Find("GameManager").GetComponent<LevelBehavior>();
+        if (levelBehavior == null)
         {
             Debug.LogError("GameManager not found for " + this + ".");
             Application.Quit();
@@ -36,9 +36,9 @@ public class ProjectileMovement : MonoBehaviour
         transform.position += (speed * Time.smoothDeltaTime) * transform.up;
 
         //check boundary collision
-        GlobalBehavior.WorldBoundStatus status =
-            globalBehavior.ObjectCollideWorldBound(GetComponent<Renderer>().bounds);
-        if (status != GlobalBehavior.WorldBoundStatus.Inside)
+        LevelBehavior.WorldBoundStatus status =
+            levelBehavior.ObjectCollideWorldBound(GetComponent<Renderer>().bounds);
+        if (status != LevelBehavior.WorldBoundStatus.Inside)
         {
             //Debug.Log("collided position: " + this.transform.position);
             Destroy(gameObject);

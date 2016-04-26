@@ -37,7 +37,7 @@ public class PlayerControl : MonoBehaviour
 
     #region Other references
     public GameObject Projectile = null;
-    private GlobalBehavior globalBehavior = null;
+    private LevelBehavior levelBehavior = null;
     #endregion
     
     // Use this for initialization
@@ -45,8 +45,8 @@ public class PlayerControl : MonoBehaviour
     void Start ()
     {
         #region References
-        globalBehavior = GameObject.Find("GameManager").GetComponent<GlobalBehavior>();
-        if (globalBehavior == null)
+        levelBehavior = GameObject.Find("GameManager").GetComponent<LevelBehavior>();
+        if (levelBehavior == null)
         {
             Debug.LogError("GameManager not found for " + this + ".");
             Application.Quit();
@@ -72,7 +72,7 @@ public class PlayerControl : MonoBehaviour
         //transform.Rotate(transform.forward, - xAxis * Time.deltaTime * turnSpeed);
 
         //clamp to world
-        globalBehavior.ClampToWorld(transform, 5.0f);
+        levelBehavior.ClampToWorld(transform, 5.0f);
         #endregion
 
         #region Fire projectile
@@ -112,7 +112,7 @@ public class PlayerControl : MonoBehaviour
 
         //Toggle movement
         if (Input.GetButtonUp("Jump"))
-            globalBehavior.Movement = !globalBehavior.Movement;
+            levelBehavior.Movement = !levelBehavior.Movement;
 
         //Update facing
         updateFacing(xAxis, yAxis);
