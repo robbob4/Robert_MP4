@@ -80,6 +80,22 @@ public class LevelBehavior : MonoBehaviour
         else
         {
             tiler.TileWorld("Prefabs/Tileset/Tile_Wood_", 10.0f, 10.0f, false, false, true, true, 1, 0);
+
+            //create a tutorial powerup
+            GameObject itemDrop = Resources.Load("Prefabs/PowerUp") as GameObject;
+            if (itemDrop == null)
+            {
+                Debug.LogError("PowerUp not found for " + this + ".");
+            }
+            else
+            {
+                GameObject e = Instantiate(itemDrop) as GameObject;
+                e.transform.position = new Vector3(sceneBoundary.WorldCenter.x + 10, sceneBoundary.WorldCenter.y + 10, 0);
+                TextMesh text = e.AddComponent<TextMesh>();
+                text.text = "This gives a burst of fireball charges!";
+                text.fontSize = 30;
+                text.alignment = TextAlignment.Center;
+            }
         }  
 
         //increase spawn interval by 1s per level

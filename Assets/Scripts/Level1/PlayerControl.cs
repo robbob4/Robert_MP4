@@ -1,7 +1,7 @@
 ﻿// -------------------------- PlayerControl.cs --------------------------------
 // Author - Robert Griswold CSS 385
 // Created - Apr 19, 2016
-// Modified - April 25, 2016
+// Modified - April 28, 2016
 // ----------------------------------------------------------------------------
 // Purpose - Implementation for a player controlled hero that can pause enemy 
 // movement with space, fire, move up/down/left/right, and is calmped to the 
@@ -180,6 +180,13 @@ public class PlayerControl : MonoBehaviour
     public Facing GetFacing()
     {
         return currentFacing;
+    }
+    #endregion
+
+    #region Powerup modification functions
+    public void ChargeBoost(int additionalCharges)
+    {
+        charges += additionalCharges;
     }
     #endregion
 }

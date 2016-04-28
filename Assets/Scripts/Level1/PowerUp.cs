@@ -1,4 +1,13 @@
-﻿
+﻿// ------------------------ SpriteUpdateEnemy.cs ------------------------------
+// Author - Brent Eaves CSS 385
+// Created - Apr 28, 2016
+// Modified - April 28, 2016
+// ----------------------------------------------------------------------------
+// Purpose - Implementation for a simple powerup that disapears when the player
+// collides with it.
+// ----------------------------------------------------------------------------
+// Notes - Gives a burst of projectiles.
+// ----------------------------------------------------------------------------
 
 using UnityEngine;
 using System.Collections;
@@ -34,7 +43,7 @@ public class PowerUp : MonoBehaviour
         if (other.gameObject.name != "Hero")
             return;
 
-        playerController.MaxCharges += 4;
+        playerController.ChargeBoost(10);
 
         Destroy(gameObject);
     }

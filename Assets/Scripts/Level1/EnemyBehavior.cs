@@ -1,7 +1,7 @@
 // -------------------------- EnemyBehavior.cs --------------------------------
 // Author - Robert Griswold CSS 385
 // Created - Apr 19, 2016
-// Modified - April 25, 2016
+// Modified - April 28, 2016
 // ----------------------------------------------------------------------------
 // Purpose - Implementation for an enemy that has three states: Normal, Run, 
 // and Stunned. See notes for details. Movement is only allowed via a variable 
