@@ -54,6 +54,11 @@ public class EnemyBehavior : MonoBehaviour
     private Vector3 directionV;
     #endregion
 
+    #region Powerup Store
+    public GameObject itemDrop = null;
+    public float itemDropRate = .25f;
+    #endregion
+
     // Use this for initialization
     void Start ()
     {
@@ -73,7 +78,7 @@ public class EnemyBehavior : MonoBehaviour
         }
 
         player = GameObject.Find("Hero");
-        if (sceneBoundary == null)
+        if (player == null)
         {
             Debug.LogError("Hero not found for " + this + ".");
         }
@@ -83,6 +88,10 @@ public class EnemyBehavior : MonoBehaviour
             if (playerController == null)
                 Debug.LogError("PlayerControl not found for " + player + ".");
         }
+
+        itemDrop = Resources.Load("Prefabs/PowerUp") as GameObject;
+        if (itemDrop == null)
+            Debug.LogError("PowerUp not found for " + this + ".");
         #endregion
 
         newDirection();
@@ -195,10 +204,18 @@ public class EnemyBehavior : MonoBehaviour
             GetComponent<Renderer>().enabled = false; //hide it to allow the sound to play out
             Destroy(GetComponent<Rigidbody2D>()); //remove collision
             deathDelay = DELAY;
+            
+            if (Random.value < itemDropRate)
+            {
+                GameObject e = Instantiate(itemDrop) as GameObject;
+                e.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+            }
 
             //play death sound
             if (deathSound != null)
                 GetComponent<AudioSource>().PlayOneShot(deathSound, 0.7f);
+
+            
         }
         else
         {
