@@ -87,7 +87,7 @@ public class PlayerControl : MonoBehaviour
 
         #region Recharge charges
         //increase number of charges if delay is up and not at max already
-        if (rechargeDelayCount-- <= 0 && charges < MaxCharges)
+        if (rechargeDelayCount-- <= 0 && charges < MaxCharges) //side effect: decreases rechargeDelayCount
         {
             charges++;
             rechargeDelayCount = RechargeDelay;
@@ -95,11 +95,16 @@ public class PlayerControl : MonoBehaviour
         }
         #endregion
 
-        #region Fire projectile
+        #region Update recastDelay
+        if (recastDelayCount > 0)
+            recastDelayCount--;
+        #endregion
+
+            #region Fire projectile
         if (Input.GetAxis("Fire1") > 0f) //Left-Control
         {
             //check if recast delay is up, there is a charge, and projectile loaded
-            if (recastDelayCount-- <= 0 && charges > 0 && Projectile != null)
+            if (recastDelayCount <= 0 && charges > 0 && Projectile != null)
             {
                 //Debug.Log(charges + "/" + MaxCharges + " " + recastDelayCount + "/" + RecastDelay);
                 charges--;
